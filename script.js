@@ -300,6 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const thresholdDisplayElement = document.getElementById('threshold-display');
     const thresholdUnitElement = document.getElementById('threshold-unit');
 
+    // DOM Elements - Add for transition overlay
+    const turnTransitionOverlay = document.getElementById('turn-transition-overlay');
+    const transitionPlayerName = document.getElementById('transition-player-name');
+
     // Current athlete
     let currentAthlete = null;
     let usedAthletesIndices = [];
@@ -732,7 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add eliminated message to the result container
             const eliminatedMessage = document.createElement('p');
             eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl elimination-message';
-            eliminatedMessage.textContent = `${gameState.players[gameState.currentPlayerIndex].name} has been ELIMINATED!`;
+            eliminatedMessage.textContent = `${gameState.players[gameState.currentPlayerIndex].name} has BUST!`;
             resultContainer.appendChild(eliminatedMessage);
             
             // Highlight the next turn button more prominently
@@ -765,7 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add an eliminated message to the result container
                 const eliminatedMessage = document.createElement('p');
                 eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl elimination-message';
-                eliminatedMessage.textContent = `${currentPlayer.name} will be ELIMINATED at the end of this round!`;
+                eliminatedMessage.textContent = `${currentPlayer.name} will be BUST at the end of this round!`;
                 resultContainer.appendChild(eliminatedMessage);
                 
                 // Highlight the next turn button
@@ -828,7 +832,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 playerResult.classList.add('loser');
                 playerResult.innerHTML = `
-                    <p class="font-semibold">${index + 1}. ${player.name} - ELIMINATED</p>
+                    <p class="font-semibold">${index + 1}. ${player.name} - BUST</p>
                     <p class="text-xl">${player.score} points</p>
                 `;
                 console.log(`DEBUG: Adding ${player.name} as loser to final scoreboard`);
@@ -895,7 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 scoreElement.innerHTML = `
                     <p class="font-semibold">${player.name}</p>
                     <p class="text-2xl">${player.score}</p>
-                    <p class="text-xs mt-1 font-bold text-red-600">ELIMINATED</p>
+                    <p class="text-xs mt-1 font-bold text-red-600">BUST</p>
                 `;
             } else {
                 scoreElement.innerHTML = `
@@ -1048,10 +1052,23 @@ document.addEventListener('DOMContentLoaded', () => {
         logGameState("After reset game");
     }
 
+    // Show transition overlay for the next player
+    function showTurnTransition(playerName, callback) {
+        if (turnTransitionOverlay && transitionPlayerName) {
+            transitionPlayerName.textContent = playerName;
+            turnTransitionOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                turnTransitionOverlay.classList.add('hidden');
+                if (callback) callback();
+            }, 1200); // 1.2 seconds
+        } else {
+            if (callback) callback();
+        }
+    }
+
     // Next player's turn
     function nextTurn() {
         console.log("DEBUG: nextTurn called");
-        
         // Add visual feedback for button click
         nextTurnButton.classList.add('clicked');
         nextTurnButton.innerHTML = `
@@ -1101,7 +1118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Move to the next player
             gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
-            
             console.log(`DEBUG: Advanced to next player index: ${gameState.currentPlayerIndex}`);
             
             // Track if we've completed a round (everyone had a turn)
@@ -1150,34 +1166,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Update current player display with correct color
-            updateCurrentPlayerDisplay();
-            
-            // Update scoreboard to highlight new active player
-            updateScoreboard();
-            
-            // Select new athlete
-            selectNewAthlete();
-            
-            // Re-enable submit button
-            submitGuessButton.disabled = false;
-            submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
-            
-            // Re-enable input fields
-            feetInput.disabled = false;
-            inchesInput.disabled = false;
-            weightInput.disabled = false;
-            
-            // Reset button appearance
-            nextTurnButton.classList.remove('clicked');
-            nextTurnButton.classList.remove('eliminated-player-next');
-            nextTurnButton.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-                NEXT TURN
-            `;
-            
-            logGameState("After nextTurn processing");
+            // Instead of immediately updating, show transition overlay
+            const nextPlayerName = gameState.players[gameState.currentPlayerIndex].name;
+            showTurnTransition(nextPlayerName, () => {
+                updateCurrentPlayerDisplay();
+                updateScoreboard();
+                selectNewAthlete();
+                submitGuessButton.disabled = false;
+                submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                feetInput.disabled = false;
+                inchesInput.disabled = false;
+                weightInput.disabled = false;
+                nextTurnButton.classList.remove('clicked');
+                nextTurnButton.classList.remove('eliminated-player-next');
+                nextTurnButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    NEXT TURN
+                `;
+                logGameState("After nextTurn processing");
+            });
         }, 500); // 500ms delay for visual effect
     }
 }); 
