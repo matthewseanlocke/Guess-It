@@ -556,6 +556,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Show transition overlay for the next player
+    function showTurnTransition(playerName, callback) {
+        if (turnTransitionOverlay && transitionPlayerName) {
+            // Remove any previous color classes from text
+            transitionPlayerName.classList.remove('text-blue-600', 'text-red-600', 'text-green-600', 'text-yellow-600');
+            // Always use semi-transparent black for scrim
+            turnTransitionOverlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            // Determine color class for player name
+            const colorIndex = gameState.currentPlayerIndex % 4;
+            let colorClass = '';
+            switch (colorIndex) {
+                case 0:
+                    colorClass = 'text-blue-600';
+                    break;
+                case 1:
+                    colorClass = 'text-red-600';
+                    break;
+                case 2:
+                    colorClass = 'text-green-600';
+                    break;
+                case 3:
+                    colorClass = 'text-yellow-600';
+                    break;
+            }
+            if (colorClass) transitionPlayerName.classList.add(colorClass);
+            transitionPlayerName.textContent = playerName;
+            turnTransitionOverlay.style.display = 'flex';
+            setTimeout(() => {
+                turnTransitionOverlay.style.display = 'none';
+                if (callback) callback();
+            }, 1200); // 1.2 seconds
+        } else {
+            if (callback) callback();
+        }
+    }
+
     // Start the game
     function startGame() {
         console.log("DEBUG: startGame called");
@@ -586,30 +622,26 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Setup game screen
         setupScreen.classList.add('hidden');
-        gameScreen.classList.remove('hidden');
-        
-        // Show the scoreboard
-        gameScoreboardElement.classList.remove('hidden');
-        
-        // Update display with correct color
-        updateCurrentPlayerDisplay();
-        
-        // Update unit labels and inputs
-        updateInputFields();
-        
-        // Initialize scoreboard
-        updateScoreboard();
-        
-        // Make sure threshold display is up to date
-        updateThresholdDisplay();
-        
-        // Reset used athletes for new game
-        usedAthletesIndices = [];
-        
-        logGameState("After startGame initialization");
-        
-        // Start first round
-        selectNewAthlete();
+        // Show transition overlay for first player before showing game screen
+        const firstPlayerName = gameState.players[0].name;
+        showTurnTransition(firstPlayerName, () => {
+            gameScreen.classList.remove('hidden');
+            // Show the scoreboard
+            gameScoreboardElement.classList.remove('hidden');
+            // Update display with correct color
+            updateCurrentPlayerDisplay();
+            // Update unit labels and inputs
+            updateInputFields();
+            // Initialize scoreboard
+            updateScoreboard();
+            // Make sure threshold display is up to date
+            updateThresholdDisplay();
+            // Reset used athletes for new game
+            usedAthletesIndices = [];
+            logGameState("After startGame initialization");
+            // Start first round
+            selectNewAthlete();
+        });
     }
 
     // Select a new athlete for guessing
@@ -1050,20 +1082,6 @@ document.addEventListener('DOMContentLoaded', () => {
         usedAthletesIndices = [];
         
         logGameState("After reset game");
-    }
-
-    // Show transition overlay for the next player
-    function showTurnTransition(playerName, callback) {
-        if (turnTransitionOverlay && transitionPlayerName) {
-            transitionPlayerName.textContent = playerName;
-            turnTransitionOverlay.classList.remove('hidden');
-            setTimeout(() => {
-                turnTransitionOverlay.classList.add('hidden');
-                if (callback) callback();
-            }, 1200); // 1.2 seconds
-        } else {
-            if (callback) callback();
-        }
     }
 
     // Next player's turn
