@@ -833,7 +833,81 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
 
-    // Check if game is over (all but one player reached losing score)
+    // Confetti effect for winner (continuous until Play Again)
+    let confettiAnimationId = null;
+    let confettiActive = false;
+    function launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.display = 'block';
+        const confettiCount = 300;
+        const confetti = [];
+        const colors = ['#ff6ec4', '#7873f5', '#42e695', '#ffe140', '#ff6ec4', '#f87171', '#34d399', '#fbbf24', '#f472b6', '#60a5fa', '#facc15'];
+        for (let i = 0; i < confettiCount; i++) {
+            confetti.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * -canvas.height,
+                r: Math.random() * 10 + 6,
+                d: Math.random() * confettiCount,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.random() * 20 - 10,
+                tiltAngleIncremental: Math.random() * 0.09 + 0.05,
+                tiltAngle: 0
+            });
+        }
+        let angle = 0;
+        let tiltAngle = 0;
+        confettiActive = true;
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < confettiCount; i++) {
+                let c = confetti[i];
+                ctx.beginPath();
+                ctx.lineWidth = c.r;
+                ctx.strokeStyle = c.color;
+                ctx.moveTo(c.x + c.tilt + c.r / 3, c.y);
+                ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+                ctx.stroke();
+            }
+            updateConfetti();
+        }
+        function updateConfetti() {
+            angle += 0.01;
+            tiltAngle += 0.1;
+            for (let i = 0; i < confettiCount; i++) {
+                let c = confetti[i];
+                c.y += (Math.cos(angle + c.d) + 3 + c.r / 2) / 1.2;
+                c.x += Math.sin(angle) * 1.5;
+                c.tiltAngle += c.tiltAngleIncremental;
+                c.tilt = Math.sin(c.tiltAngle - i) * 18;
+                if (c.y > canvas.height) {
+                    c.x = Math.random() * canvas.width;
+                    c.y = -10;
+                }
+            }
+        }
+        function animate() {
+            if (!confettiActive) return;
+            drawConfetti();
+            confettiAnimationId = requestAnimationFrame(animate);
+        }
+        animate();
+    }
+    function stopConfetti() {
+        confettiActive = false;
+        if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+        const canvas = document.getElementById('confetti-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.display = 'none';
+        }
+    }
+
+    // Show game over screen (add confetti)
     function showGameOverScreen() {
         console.log("DEBUG: showGameOverScreen called");
         
@@ -895,6 +969,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show game over screen
         gameScreen.classList.add('hidden');
         gameOverScreen.classList.remove('hidden');
+        // Launch confetti!
+        launchConfetti();
     }
 
     // Update the scoreboard display
@@ -1215,4 +1291,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.value = 9;
         }
     });
+
+    // Stop confetti when Play Again is pressed
+    playAgainButton.addEventListener('click', stopConfetti);
 }); 

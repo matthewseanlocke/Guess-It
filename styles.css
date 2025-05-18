@@ -115,6 +115,21 @@ button:disabled {
 .winner {
   background-color: #d1fae5;
   border: 2px solid #34d399;
+  animation: winner-pulse 1.3s infinite;
+  color: #222;
+  transform: scale(1.08);
+  box-shadow: 0 0 32px 8px rgba(16, 185, 129, 0.25);
+}
+
+@keyframes winner-pulse {
+  0%, 100% {
+    transform: scale(1.08);
+    box-shadow: 0 0 32px 8px rgba(16, 185, 129, 0.25);
+  }
+  50% {
+    transform: scale(1.16);
+    box-shadow: 0 0 48px 16px rgba(16, 185, 129, 0.45);
+  }
 }
 
 .loser {
@@ -884,4 +899,10 @@ input:disabled {
 
 .fade-out {
   animation: fadeOut 0.5s forwards;
+}
+
+#game-over-screen {
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ffe140, #ff6ec4);
+  background-size: 1000% 1000%;
+  animation: rainbow-bg 8s linear infinite;
 } 

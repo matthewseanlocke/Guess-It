@@ -181,7 +181,7 @@
         
         <!-- Game Over Screen -->
         <div id="game-over-screen" class="hidden bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">Game Over!</h2>
+            <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;"></canvas>
             <div id="final-results" class="mb-6">
                 <p class="text-2xl font-semibold mb-2">Results:</p>
                 <div id="final-scoreboard" class="text-left p-4 bg-gray-100 rounded-lg"></div>
