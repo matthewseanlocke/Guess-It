@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess It - Athletes Edition</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="min-h-screen flex flex-col items-center justify-center">
+        <div class="question-marks-background">
+            <!-- Large individual question marks with resizing animations -->
+            <div class="large-question" style="top: 15%; left: 10%; font-size: 120px; animation: resizeQuestion 7s infinite;">?</div>
+            <div class="large-question" style="top: 25%; right: 15%; font-size: 150px; animation: resizeQuestionAlt 8s infinite;">?</div>
+            <div class="large-question" style="bottom: 20%; left: 20%; font-size: 100px; animation: resizeQuestion 9s infinite;">?</div>
+            <div class="large-question" style="bottom: 30%; right: 25%; font-size: 80px; animation: resizeQuestionAlt 6.5s infinite;">?</div>
+            <div class="large-question" style="top: 60%; left: 25%; font-size: 130px; animation: resizeQuestion 10s infinite;">?</div>
+            <div class="large-question" style="top: 40%; right: 10%; font-size: 110px; animation: resizeQuestionAlt 7.5s infinite;">?</div>
+        </div>
+        <div class="text-center relative z-10">
+            <h1 class="text-6xl font-bold text-white mb-4">Guess It!</h1>
+            <div class="question-mark text-8xl font-bold text-white">?</div>
+        </div>
+    </div>
+    
+    <div class="container mx-auto px-4 py-8 hidden" id="main-content">
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto pb-20">
+            <h2 class="text-2xl font-semibold mb-4">Game Setup</h2>
+            
+            <div class="mb-4 start-here-section pulse-highlight">
+                <label class="block text-blue-600 font-semibold text-lg mb-2">Number of Players:</label>
+                <div class="flex space-x-2">
+                    <button class="player-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" data-players="1">1</button>
+                    <button class="player-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" data-players="2">2</button>
+                    <button class="player-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" data-players="3">3</button>
+                    <button class="player-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" data-players="4">4</button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Guess:</label>
+                <div class="flex space-x-2">
+                    <button class="stat-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 active" data-stat="height">Height</button>
+                    <button class="stat-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" data-stat="weight">Weight</button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Game Threshold:</label>
+                <div class="flex items-center">
+                    <div class="mr-3">
+                        <span>Play to:</span>
+                    </div>
+                    <div class="threshold-selector flex space-x-2">
+                        <button class="threshold-btn bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600" data-threshold="20">20</button>
+                        <button class="threshold-btn bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 active" data-threshold="50">50</button>
+                        <button class="threshold-btn bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600" data-threshold="100">100</button>
+                        <div class="custom-threshold">
+                            <input type="number" id="custom-threshold" class="border-2 border-gray-300 rounded px-2 py-1 w-16 text-center" placeholder="Custom" min="10" max="500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Select Sports:</label>
+                <div class="sports-selection grid grid-cols-2 gap-2">
+                    <div class="sport-option">
+                        <input type="checkbox" id="basketball" class="sport-checkbox" value="Basketball" checked>
+                        <label for="basketball" class="ml-1">NBA Basketball</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="football" class="sport-checkbox" value="American Football" checked>
+                        <label for="football" class="ml-1">Football</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="soccer" class="sport-checkbox" value="Soccer">
+                        <label for="soccer" class="ml-1">Soccer</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="tennis" class="sport-checkbox" value="Tennis">
+                        <label for="tennis" class="ml-1">Tennis</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="track" class="sport-checkbox" value="Track & Field">
+                        <label for="track" class="ml-1">Track & Field</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="swimming" class="sport-checkbox" value="Swimming">
+                        <label for="swimming" class="ml-1">Swimming</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="gymnastics" class="sport-checkbox" value="Gymnastics">
+                        <label for="gymnastics" class="ml-1">Gymnastics</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="boxing" class="sport-checkbox" value="Boxing">
+                        <label for="boxing" class="ml-1">Boxing</label>
+                    </div>
+                    <div class="sport-option">
+                        <input type="checkbox" id="golf" class="sport-checkbox" value="Golf">
+                        <label for="golf" class="ml-1">Golf</label>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button id="select-all-sports" class="text-sm text-blue-600 hover:underline">Select All</button>
+                    <span class="mx-2">|</span>
+                    <button id="deselect-all-sports" class="text-sm text-blue-600 hover:underline">Deselect All</button>
+                </div>
+            </div>
+            
+            <div id="player-names-container" class="mb-6 hidden">
+                <h3 class="text-xl font-semibold mb-2">Enter Player Names:</h3>
+                <div id="player-inputs"></div>
+            </div>
+        </div>
+        
+        <!-- Fixed Start Game Button -->
+        <div id="start-game-container" class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg">
+            <button id="start-game" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50" disabled>START GAME</button>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="game-screen" class="hidden bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto transition-colors duration-300 ease-in-out">
+            <div class="text-center mb-6">
+                <h2 class="text-4xl font-bold text-blue-600">Round <span id="current-round">1</span></h2>
+            </div>
+            
+            <div class="flex justify-between mb-8">
+                <div class="text-center w-full">
+                    <p class="text-gray-600 mb-1">Current Player:</p>
+                    <div class="inline-block">
+                        <h2 id="current-player" class="text-4xl font-bold">Player 1</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="athlete-container mb-8 text-center">
+                <h3 id="athlete-name" class="text-2xl font-bold mb-1">Athlete Name</h3>
+                <p id="athlete-info" class="text-lg text-gray-600">Athlete Info</p>
+            </div>
+
+            <div class="guess-input-container mb-6 text-center">
+                <label for="guess-input" class="block text-xl mb-2">Your Guess:</label>
+                
+                <!-- Input for weight -->
+                <div id="weight-input-container" class="flex items-center justify-center">
+                    <input type="number" id="weight-input" class="border-2 border-gray-300 rounded-lg px-4 py-2 text-xl w-32 text-center" placeholder="0">
+                    <span class="ml-2 text-lg">lbs</span>
+                </div>
+                
+                <!-- Input for height (feet and inches) -->
+                <div id="height-input-container" class="flex items-center justify-center space-x-2 hidden">
+                    <div class="flex items-center">
+                        <input type="number" id="feet-input" class="border-2 border-gray-300 rounded-lg px-4 py-2 text-xl w-20 text-center" placeholder="0" min="0">
+                        <span class="ml-1 text-lg">ft</span>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="number" id="inches-input" class="border-2 border-gray-300 rounded-lg px-4 py-2 text-xl w-20 text-center" placeholder="0" min="0" max="11">
+                        <span class="ml-1 text-lg">in</span>
+                    </div>
+                </div>
+                
+                <button id="submit-guess" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Submit Guess</button>
+            </div>
+
+            <div id="result-container" class="hidden mb-6 p-4 rounded-lg text-center">
+                <p class="text-xl">Actual <span id="stat-type">height</span>: <span id="actual-value">0</span> <span id="unit-display"></span></p>
+                <p class="text-xl">Your guess: <span id="guess-value">0</span> <span id="unit-display2"></span></p>
+                <p class="text-xl font-bold">Difference: <span id="difference-value">0</span> points</p>
+                <button id="next-turn" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    NEXT TURN
+                </button>
+            </div>
+        </div>
+        
+        <!-- Fixed Scoreboard -->
+        <div id="game-scoreboard" class="scoreboard hidden">
+            <h3 class="text-xl font-semibold">Scoreboard</h3>
+            <div id="player-scores" class="grid grid-cols-4 gap-4 mt-2"></div>
+            <div class="game-threshold-display mt-2 text-center">
+                <p class="text-sm text-gray-600">Game to <span id="threshold-display">50</span> <span id="threshold-unit">inches</span></p>
+            </div>
+        </div>
+        
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="hidden bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Game Over!</h2>
+            <div id="final-results" class="mb-6">
+                <p class="text-2xl font-semibold mb-2">Results:</p>
+                <div id="final-scoreboard" class="text-left p-4 bg-gray-100 rounded-lg"></div>
+            </div>
+            <button id="play-again" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
