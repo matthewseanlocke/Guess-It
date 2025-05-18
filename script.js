@@ -521,19 +521,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to update the current player display with the right color
     function updateCurrentPlayerDisplay() {
-        // Get the index for color
+        // Only update the game background color, no DOM updates for current player
         const colorIndex = gameState.currentPlayerIndex % 4;
-        
-        // Clear previous color classes
-        currentPlayerElement.classList.remove('player-color-0', 'player-color-1', 'player-color-2', 'player-color-3');
-        
-        // Add the appropriate color class
-        currentPlayerElement.classList.add(`player-color-${colorIndex}`);
-        
-        // Set the text content
-        currentPlayerElement.textContent = gameState.players[gameState.currentPlayerIndex].name;
-
-        // Update the game background with a very subtle tint of the player's color
         updateGameBackground(colorIndex);
     }
 
@@ -699,6 +688,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show result
         resultContainer.classList.remove('hidden');
+
+        // Scroll the result and Next Turn button into view on mobile
+        setTimeout(() => {
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 100);
         
         if (gameState.statToGuess === 'height') {
             const { feet, inches } = cmToFeetInches(currentAthlete[gameState.statToGuess]);

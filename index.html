@@ -125,22 +125,13 @@
         
         <!-- Game Screen -->
         <div id="game-screen" class="hidden bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto transition-colors duration-300 ease-in-out">
-            <div class="text-center mb-6">
+            <div class="text-center mb-2 sticky top-0 z-20 bg-white pb-2" style="background: white;">
                 <h2 class="text-4xl font-bold text-blue-600">Round <span id="current-round">1</span></h2>
             </div>
             
-            <div class="flex justify-between mb-8">
-                <div class="text-center w-full">
-                    <p class="text-gray-600 mb-1">Current Player:</p>
-                    <div class="inline-block">
-                        <h2 id="current-player" class="text-4xl font-bold">Player 1</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="athlete-container mb-8 text-center">
-                <h3 id="athlete-name" class="text-2xl font-bold mb-1">Athlete Name</h3>
-                <p id="athlete-info" class="text-lg text-gray-600">Athlete Info</p>
+            <div class="athlete-container mb-2 text-center">
+                <h3 id="athlete-name" class="text-2xl font-bold mb-0">Athlete Name</h3>
+                <p id="athlete-info" class="text-lg text-gray-600 mt-0">Athlete Info</p>
             </div>
 
             <div class="guess-input-container mb-6 text-center">
@@ -182,7 +173,6 @@
         
         <!-- Fixed Scoreboard -->
         <div id="game-scoreboard" class="scoreboard hidden">
-            <h3 class="text-xl font-semibold">Scoreboard</h3>
             <div id="player-scores" class="grid grid-cols-4 gap-4 mt-2"></div>
             <div class="game-threshold-display mt-2 text-center">
                 <p class="text-sm text-gray-600">Game to <span id="threshold-display">50</span> <span id="threshold-unit">inches</span></p>
