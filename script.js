@@ -1354,6 +1354,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (parseInt(this.value) > 9) {
             this.value = 9;
         }
+        // Automatically focus inches input after entering feet
+        if (this.value.length >= 1) {
+            inchesInput.focus();
+        }
     });
 
     // Stop confetti when Play Again is pressed
