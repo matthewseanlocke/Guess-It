@@ -16,6 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
         gameThreshold: 50 // Default game threshold
     };
 
+    // Debug function to log game state
+    function logGameState(message) {
+        console.log(`DEBUG ${message}:`, {
+            gameOver: gameState.gameOver,
+            currentPlayerIndex: gameState.currentPlayerIndex,
+            numberOfPlayers: gameState.numberOfPlayers,
+            currentRound: gameState.currentRound,
+            eliminatedPlayers: [...gameState.eliminatedPlayers],
+            players: gameState.players.map(p => ({
+                name: p.name,
+                score: p.score,
+                markedForElimination: p.markedForElimination
+            }))
+        });
+    }
+
     // Mouse interaction for splash screen question marks
     const splashScreenEl = document.getElementById('splash-screen');
     const largeQuestions = document.querySelectorAll('.large-question');
@@ -549,6 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the game
     function startGame() {
+        console.log("DEBUG: startGame called");
         // Make sure we have some athletes to play with
         if (filteredAthletes.length === 0) {
             alert('Please select at least one sport to play with!');
@@ -568,6 +585,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Reset game state for new game
+        gameState.currentPlayerIndex = 0;
+        gameState.currentRound = 1;
+        gameState.gameOver = false;
+        gameState.eliminatedPlayers = [];
+        
         // Setup game screen
         setupScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
@@ -589,6 +612,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Reset used athletes for new game
         usedAthletesIndices = [];
+        
+        logGameState("After startGame initialization");
         
         // Start first round
         selectNewAthlete();
@@ -623,6 +648,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Submit a guess
     function submitGuess() {
+        console.log("DEBUG: submitGuess called");
+        
         let guess;
         let difference;
         
@@ -668,6 +695,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update player score
         gameState.players[gameState.currentPlayerIndex].score += difference;
         
+        console.log(`DEBUG: Player ${gameState.players[gameState.currentPlayerIndex].name} new score: ${gameState.players[gameState.currentPlayerIndex].score}`);
+        
         // Show result
         resultContainer.classList.remove('hidden');
         
@@ -704,15 +733,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // If player is eliminated, update the result message
         if (isPlayerEliminated) {
+            console.log(`DEBUG: Player ${gameState.players[gameState.currentPlayerIndex].name} eliminated during turn`);
+            
             // Add eliminated message to the result container
             const eliminatedMessage = document.createElement('p');
-            eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl';
+            eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl elimination-message';
             eliminatedMessage.textContent = `${gameState.players[gameState.currentPlayerIndex].name} has been ELIMINATED!`;
             resultContainer.appendChild(eliminatedMessage);
             
             // Highlight the next turn button more prominently
             nextTurnButton.classList.add('eliminated-player-next');
         }
+        
+        logGameState("After submitting guess");
     }
 
     // Check if the current player is eliminated
@@ -721,18 +754,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentLosingScore = gameState.losingScores[gameState.statToGuess];
         const currentPlayer = gameState.players[gameState.currentPlayerIndex];
         
+        console.log(`DEBUG: Checking elimination for player ${currentPlayer.name} (index ${gameState.currentPlayerIndex})`);
+        console.log(`DEBUG: Player score: ${currentPlayer.score}, Threshold: ${currentLosingScore}`);
+        
         // Check if player score equals or exceeds the losing score threshold
         if (currentPlayer.score >= currentLosingScore) {
             // Mark player for elimination but don't actually eliminate until round ends
             if (!gameState.eliminatedPlayers.includes(gameState.currentPlayerIndex) && 
                 !currentPlayer.markedForElimination) {
                 
+                console.log(`DEBUG: Marking player ${currentPlayer.name} for elimination`);
+                
                 // Mark them for elimination but proceed with the round
                 currentPlayer.markedForElimination = true;
                 
                 // Add an eliminated message to the result container
                 const eliminatedMessage = document.createElement('p');
-                eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl';
+                eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl elimination-message';
                 eliminatedMessage.textContent = `${currentPlayer.name} will be ELIMINATED at the end of this round!`;
                 resultContainer.appendChild(eliminatedMessage);
                 
@@ -744,10 +782,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const otherPlayerIndex = gameState.currentPlayerIndex === 0 ? 1 : 0;
                     const otherPlayer = gameState.players[otherPlayerIndex];
                     
+                    console.log(`DEBUG: Two player game - checking other player ${otherPlayer.name}`);
+                    console.log(`DEBUG: Other player eliminated: ${gameState.eliminatedPlayers.includes(otherPlayerIndex)}, marked: ${otherPlayer.markedForElimination}`);
+                    
                     // If other player is already eliminated or marked for elimination, game is over
                     if (gameState.eliminatedPlayers.includes(otherPlayerIndex) || 
                         otherPlayer.markedForElimination) {
                         
+                        console.log(`DEBUG: Both players eliminated or marked - game over`);
                         // Mark game as over immediately in 2-player scenario
                         gameState.gameOver = true;
                     }
@@ -762,9 +804,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if game is over (all but one player reached losing score)
     function showGameOverScreen() {
+        console.log("DEBUG: showGameOverScreen called");
+        
         // Find the winner (the only player not eliminated)
         const winnerIndex = Array.from({length: gameState.numberOfPlayers}, (_, i) => i)
             .find(index => !gameState.eliminatedPlayers.includes(index));
+        
+        console.log(`DEBUG: Determined winner index: ${winnerIndex}`);
         
         // Sort players by score (lowest first, which is better)
         const sortedPlayers = [...gameState.players].sort((a, b) => a.score - b.score);
@@ -784,16 +830,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="font-semibold">${index + 1}. ${player.name} - WINNER!</p>
                     <p class="text-xl">${player.score} points</p>
                 `;
+                console.log(`DEBUG: Adding ${player.name} as winner to final scoreboard`);
             } else {
                 playerResult.classList.add('loser');
                 playerResult.innerHTML = `
                     <p class="font-semibold">${index + 1}. ${player.name} - ELIMINATED</p>
                     <p class="text-xl">${player.score} points</p>
                 `;
+                console.log(`DEBUG: Adding ${player.name} as loser to final scoreboard`);
             }
             
             finalScoreboard.appendChild(playerResult);
         });
+        
+        // Clear any elimination messages
+        const eliminationMessages = document.querySelectorAll('.elimination-message');
+        eliminationMessages.forEach(msg => {
+            msg.remove();
+        });
+        
+        // Reset button states
+        nextTurnButton.classList.remove('clicked');
+        nextTurnButton.classList.remove('eliminated-player-next');
+        nextTurnButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            NEXT TURN
+        `;
+        
+        console.log("DEBUG: Showing game over screen");
         
         // Show game over screen
         gameScreen.classList.add('hidden');
@@ -863,8 +929,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Process players marked for elimination at the end of a round
+    function processEliminationsAtRoundEnd() {
+        console.log("DEBUG: Processing eliminations at round end");
+        
+        // Find all players marked for elimination and add them to the eliminated array
+        let newEliminationsOccurred = false;
+        
+        gameState.players.forEach((player, index) => {
+            if (player.markedForElimination && !gameState.eliminatedPlayers.includes(index)) {
+                console.log(`DEBUG: Player ${player.name} (index ${index}) officially eliminated at round end`);
+                gameState.eliminatedPlayers.push(index);
+                newEliminationsOccurred = true;
+            }
+        });
+        
+        // Count non-eliminated players
+        const nonEliminatedCount = gameState.numberOfPlayers - gameState.eliminatedPlayers.length;
+        console.log(`DEBUG: Non-eliminated players: ${nonEliminatedCount}`);
+        
+        // If there's only one player left, the game is over
+        if (nonEliminatedCount <= 1) {
+            console.log("DEBUG: Only one player remaining - game over");
+            gameState.gameOver = true;
+            // Small delay to ensure UI updates properly
+            setTimeout(() => {
+                showGameOverScreen();
+            }, 100);
+            return;
+        }
+        
+        // If new eliminations occurred, show notification
+        if (newEliminationsOccurred) {
+            console.log("DEBUG: Showing round end eliminations message");
+            
+            // Display a notification about eliminated players
+            const roundEndMessage = document.createElement('div');
+            roundEndMessage.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white py-3 px-4 text-center font-bold z-50';
+            roundEndMessage.textContent = `Round ${gameState.currentRound - 1} complete! ${gameState.eliminatedPlayers.length} player(s) eliminated.`;
+            document.body.appendChild(roundEndMessage);
+            
+            // Remove the message after 3 seconds
+            setTimeout(() => {
+                roundEndMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    if (document.body.contains(roundEndMessage)) {
+                        document.body.removeChild(roundEndMessage);
+                    }
+                }, 500);
+            }, 3000);
+        }
+    }
+
     // Reset the game to play again
     function resetGame() {
+        console.log("DEBUG: resetGame called");
+        
         // Reset game state
         gameState.players = [];
         gameState.currentPlayerIndex = 0;
@@ -873,6 +993,25 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.currentRound = 1;
         gameState.gameOver = false;
         gameState.eliminatedPlayers = []; // Reset eliminated players array
+        
+        // Clear any elimination messages
+        const eliminationMessages = document.querySelectorAll('.elimination-message');
+        eliminationMessages.forEach(msg => {
+            msg.remove();
+        });
+        
+        // Clear result container
+        resultContainer.classList.add('hidden');
+        
+        // Reset next turn button appearance
+        nextTurnButton.classList.remove('clicked');
+        nextTurnButton.classList.remove('eliminated-player-next');
+        nextTurnButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            NEXT TURN
+        `;
         
         // Hide the scoreboard
         gameScoreboardElement.classList.add('hidden');
@@ -911,10 +1050,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Reset used athletes
         usedAthletesIndices = [];
+        
+        logGameState("After reset game");
     }
 
     // Next player's turn
     function nextTurn() {
+        console.log("DEBUG: nextTurn called");
+        
         // Add visual feedback for button click
         nextTurnButton.classList.add('clicked');
         nextTurnButton.innerHTML = `
@@ -925,10 +1068,20 @@ document.addEventListener('DOMContentLoaded', () => {
             Loading...
         `;
         
+        // Clean up any existing elimination messages
+        const eliminationMessages = document.querySelectorAll('.elimination-message');
+        eliminationMessages.forEach(msg => {
+            msg.remove();
+        });
+        
+        // Hide the result container
+        resultContainer.classList.add('hidden');
+        
         // Add a small delay for visual effect
         setTimeout(() => {
             // If game is already over, show the game over screen and exit
             if (gameState.gameOver) {
+                console.log("DEBUG: Game over detected in nextTurn");
                 showGameOverScreen();
                 return;
             }
@@ -942,7 +1095,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const player0Out = gameState.eliminatedPlayers.includes(0) || player0.markedForElimination;
                 const player1Out = gameState.eliminatedPlayers.includes(1) || player1.markedForElimination;
                 
+                console.log(`DEBUG: Two player check - player0 out: ${player0Out}, player1 out: ${player1Out}`);
+                
                 if (player0Out && player1Out) {
+                    console.log("DEBUG: Both players in 2-player game are out - ending game");
                     gameState.gameOver = true;
                     showGameOverScreen();
                     return;
@@ -952,21 +1108,26 @@ document.addEventListener('DOMContentLoaded', () => {
             // Move to the next player
             gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
             
+            console.log(`DEBUG: Advanced to next player index: ${gameState.currentPlayerIndex}`);
+            
             // Track if we've completed a round (everyone had a turn)
             const roundComplete = gameState.currentPlayerIndex === 0;
             
             // If we've reached the start of a new round, process eliminations and increment round
             if (roundComplete) {
+                console.log("DEBUG: Round complete, processing eliminations");
                 // Process any players marked for elimination
                 processEliminationsAtRoundEnd();
                 
                 // If game became over after processing eliminations, exit the function
                 if (gameState.gameOver) {
+                    console.log("DEBUG: Game over after processing eliminations");
                     return;
                 }
                 
                 // Increment round number
                 gameState.currentRound++;
+                console.log(`DEBUG: New round: ${gameState.currentRound}`);
                 currentRoundElement.textContent = gameState.currentRound;
             }
             
@@ -974,8 +1135,12 @@ document.addEventListener('DOMContentLoaded', () => {
             let attemptCount = 0;
             const maxAttempts = gameState.numberOfPlayers; // Prevent infinite loop
             
+            console.log(`DEBUG: Checking if current player ${gameState.currentPlayerIndex} is eliminated`);
+            console.log(`DEBUG: Eliminated players: ${JSON.stringify(gameState.eliminatedPlayers)}`);
+            
             while (gameState.eliminatedPlayers.includes(gameState.currentPlayerIndex) && 
                     attemptCount < maxAttempts) {
+                console.log(`DEBUG: Player ${gameState.currentPlayerIndex} is eliminated, moving to next`);
                 gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
                 attemptCount++;
                 
@@ -983,6 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // the game should end
                 if (attemptCount >= maxAttempts - 1 && 
                     gameState.eliminatedPlayers.length >= gameState.numberOfPlayers - 1) {
+                    console.log(`DEBUG: All but one player eliminated - game over`);
                     gameState.gameOver = true;
                     showGameOverScreen();
                     return;
@@ -1016,51 +1182,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </svg>
                 NEXT TURN
             `;
-        }, 500); // 500ms delay for visual effect
-    }
-    
-    // Process players marked for elimination at the end of a round
-    function processEliminationsAtRoundEnd() {
-        // Find all players marked for elimination and add them to the eliminated array
-        let newEliminationsOccurred = false;
-        
-        gameState.players.forEach((player, index) => {
-            if (player.markedForElimination && !gameState.eliminatedPlayers.includes(index)) {
-                gameState.eliminatedPlayers.push(index);
-                newEliminationsOccurred = true;
-            }
-        });
-        
-        // Count non-eliminated players
-        const nonEliminatedCount = gameState.numberOfPlayers - gameState.eliminatedPlayers.length;
-        
-        // If there's only one player left, the game is over
-        if (nonEliminatedCount <= 1) {
-            gameState.gameOver = true;
-            // Small delay to ensure UI updates properly
-            setTimeout(() => {
-                showGameOverScreen();
-            }, 100);
-            return;
-        }
-        
-        // If new eliminations occurred, show notification
-        if (newEliminationsOccurred) {
-            // Display a notification about eliminated players
-            const roundEndMessage = document.createElement('div');
-            roundEndMessage.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white py-3 px-4 text-center font-bold z-50';
-            roundEndMessage.textContent = `Round ${gameState.currentRound - 1} complete! ${gameState.eliminatedPlayers.length} player(s) eliminated.`;
-            document.body.appendChild(roundEndMessage);
             
-            // Remove the message after 3 seconds
-            setTimeout(() => {
-                roundEndMessage.classList.add('fade-out');
-                setTimeout(() => {
-                    if (document.body.contains(roundEndMessage)) {
-                        document.body.removeChild(roundEndMessage);
-                    }
-                }, 500);
-            }, 3000);
-        }
+            logGameState("After nextTurn processing");
+        }, 500); // 500ms delay for visual effect
     }
 }); 
