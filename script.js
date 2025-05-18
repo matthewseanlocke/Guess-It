@@ -446,43 +446,99 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Guess (stat) button logic: swap classes for selected/unselected
+    function updateStatButtonStyles() {
+        statButtons.forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'bg-white', 'text-white', 'text-blue-700', 'font-bold', 'border-blue-800', 'border-blue-300');
+            // Remove any forced inline styles
+            btn.style.backgroundColor = '';
+            btn.style.color = '';
+            if (btn.getAttribute('data-stat') === gameState.statToGuess) {
+                btn.classList.add('bg-blue-600', 'text-white', 'font-bold', 'border-blue-800');
+                // Force correct color with inline style
+                btn.style.backgroundColor = '#2563eb'; // Tailwind blue-600
+                btn.style.color = '#fff';
+            } else {
+                btn.classList.add('bg-white', 'text-blue-700', 'border-blue-300');
+            }
+        });
+    }
     statButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            statButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
             gameState.statToGuess = btn.getAttribute('data-stat');
-            
-            // Update input fields and threshold display when stat type changes
+            // Set default threshold based on stat
+            if (gameState.statToGuess === 'height') {
+                gameState.gameThreshold = 20;
+                updateLosingScores(20);
+                if (thresholdDisplayElement) thresholdDisplayElement.textContent = 20;
+            } else {
+                gameState.gameThreshold = 100;
+                updateLosingScores(100);
+                if (thresholdDisplayElement) thresholdDisplayElement.textContent = 100;
+            }
+            updateStatButtonStyles();
+            // Debug: log class list and computed styles for Weight button AFTER styles are updated
+            if (gameState.statToGuess === 'weight') {
+                const weightBtn = Array.from(statButtons).find(b => b.getAttribute('data-stat') === 'weight');
+                if (weightBtn) {
+                    const computed = window.getComputedStyle(weightBtn);
+                    console.log('[DEBUG] Weight button classList:', weightBtn.className);
+                    console.log('[DEBUG] Weight button computed background:', computed.backgroundColor);
+                    console.log('[DEBUG] Weight button computed color:', computed.color);
+                }
+            }
+            updateThresholdButtonStyles();
             updateInputFields();
-            
             checkStartButtonState();
         });
     });
+    // Set initial state
+    // Set default threshold based on default stat
+    if (gameState.statToGuess === 'height') {
+        gameState.gameThreshold = 20;
+        updateLosingScores(20);
+        if (thresholdDisplayElement) thresholdDisplayElement.textContent = 20;
+    } else {
+        gameState.gameThreshold = 100;
+        updateLosingScores(100);
+        if (thresholdDisplayElement) thresholdDisplayElement.textContent = 100;
+    }
+    updateStatButtonStyles();
+    updateThresholdButtonStyles();
 
-    // Threshold button event listeners
+    // Threshold button logic: swap classes for selected/unselected
+    function updateThresholdButtonStyles() {
+        thresholdButtons.forEach(btn => {
+            btn.classList.remove('bg-purple-700', 'bg-white', 'text-purple-700', 'font-bold', 'border-purple-900', 'shadow-lg', 'border-purple-300');
+            // Remove any forced inline styles
+            btn.style.backgroundColor = '';
+            btn.style.color = '';
+            if (parseInt(btn.getAttribute('data-threshold')) === gameState.gameThreshold) {
+                btn.classList.add('bg-purple-700', 'text-white', 'font-bold', 'border-purple-900', 'shadow-lg');
+                // Force correct color with inline style
+                btn.style.backgroundColor = '#7c3aed'; // Tailwind purple-700
+                btn.style.color = '#fff';
+            } else {
+                btn.classList.add('bg-white', 'text-purple-700', 'border-purple-300');
+            }
+        });
+    }
     thresholdButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            thresholdButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Clear custom threshold input
-            customThresholdInput.value = '';
-            
-            // Set game threshold
             const threshold = parseInt(btn.getAttribute('data-threshold'));
             gameState.gameThreshold = threshold;
-            
-            // Update losing scores based on selected threshold
+            updateThresholdButtonStyles();
+            // Clear custom threshold input
+            customThresholdInput.value = '';
             updateLosingScores(threshold);
-            
-            // Update threshold display
             if (thresholdDisplayElement) {
                 thresholdDisplayElement.textContent = threshold;
             }
-            
             checkStartButtonState();
         });
     });
+    // Set initial state
+    updateThresholdButtonStyles();
     
     // Custom threshold input event
     customThresholdInput.addEventListener('input', () => {
@@ -729,10 +785,9 @@ document.addEventListener('DOMContentLoaded', () => {
         athleteNameElement.textContent = currentAthlete.name;
         athleteInfoElement.textContent = currentAthlete.sport;
         
-        // Reset form and ensure submit button is enabled
+        // Reset form and validate inputs
         updateInputFields();
-        submitGuessButton.disabled = false;
-        submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        validateGuessInputs();
         resultContainer.classList.add('hidden');
     }
 
@@ -1379,4 +1434,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Stop confetti when Play Again is pressed
     playAgainButton.addEventListener('click', stopConfetti);
+
+    // Add input validation for submit guess button
+    function validateGuessInputs() {
+        if (gameState.statToGuess === 'height') {
+            const feet = parseInt(feetInput.value) || 0;
+            const inches = parseInt(inchesInput.value) || 0;
+            submitGuessButton.disabled = feet === 0 && inches === 0;
+        } else {
+            const weight = parseInt(weightInput.value) || 0;
+            submitGuessButton.disabled = weight <= 0;
+        }
+        
+        // Update button appearance
+        if (submitGuessButton.disabled) {
+            submitGuessButton.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    // Add input event listeners for validation
+    feetInput.addEventListener('input', validateGuessInputs);
+    inchesInput.addEventListener('input', validateGuessInputs);
+    weightInput.addEventListener('input', validateGuessInputs);
 }); 
