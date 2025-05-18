@@ -976,8 +976,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("DEBUG: showGameOverScreen called");
         
         // Find the winner (the only player not eliminated)
-        const winnerIndex = Array.from({length: gameState.numberOfPlayers}, (_, i) => i)
-            .find(index => !gameState.eliminatedPlayers.includes(index));
+        let winnerIndex;
+        if (gameState.numberOfPlayers === 1) {
+            winnerIndex = 0; // Always the single player
+        } else {
+            winnerIndex = Array.from({length: gameState.numberOfPlayers}, (_, i) => i)
+                .find(index => !gameState.eliminatedPlayers.includes(index));
+        }
         
         console.log(`DEBUG: Determined winner index: ${winnerIndex}`);
         
@@ -992,8 +997,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const playerResult = document.createElement('div');
             playerResult.className = 'mb-2 p-2 rounded player-color-' + (playerIndex % 4);
             
-            // Winner is the only non-eliminated player
-            if (playerIndex === winnerIndex) {
+            // Winner is the only non-eliminated player, or always in 1-player mode
+            if (gameState.numberOfPlayers === 1 || playerIndex === winnerIndex) {
                 playerResult.classList.add('winner');
                 playerResult.innerHTML = `
                     <p class="font-semibold">${index + 1}. ${player.name} - WINNER!</p>
@@ -1256,23 +1261,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            // Handle special case for two players where both bust
-            if (gameState.numberOfPlayers === 2) {
-                const player0 = gameState.players[0];
-                const player1 = gameState.players[1];
-                
-                // If both players are eliminated or marked for elimination, end the game
-                const player0Out = gameState.eliminatedPlayers.includes(0) || player0.markedForElimination;
-                const player1Out = gameState.eliminatedPlayers.includes(1) || player1.markedForElimination;
-                
-                console.log(`DEBUG: Two player check - player0 out: ${player0Out}, player1 out: ${player1Out}`);
-                
-                if (player0Out && player1Out) {
-                    console.log("DEBUG: Both players in 2-player game are out - ending game");
+            // 1-player mode: just keep going until eliminated
+            if (gameState.numberOfPlayers === 1) {
+                // If the player is eliminated, end the game
+                if (gameState.eliminatedPlayers.includes(0)) {
                     gameState.gameOver = true;
                     showGameOverScreen();
                     return;
                 }
+                // Otherwise, just select a new athlete and continue
+                gameState.currentRound++;
+                currentRoundElement.textContent = gameState.currentRound;
+                updateCurrentPlayerDisplay();
+                updateScoreboard();
+                selectNewAthlete();
+                submitGuessButton.disabled = false;
+                submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                feetInput.disabled = false;
+                inchesInput.disabled = false;
+                weightInput.disabled = false;
+                nextTurnButton.classList.remove('clicked');
+                nextTurnButton.classList.remove('eliminated-player-next');
+                nextTurnButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    NEXT TURN
+                `;
+                logGameState("After nextTurn processing (1-player mode)");
+                return;
             }
             
             // Move to the next player
