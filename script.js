@@ -440,7 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
             playerNamesContainer.classList.remove('hidden');
             
             // Stop the pulse animation on the "Start Here" section
-            document.querySelector('.start-here-section').classList.add('selection-made');
+            const startHereSection = document.querySelector('.start-here-section');
+            startHereSection.classList.add('selection-made');
+            // Remove rainbow attract after selection
+            startHereSection.classList.remove('rainbow-attract');
             
             checkStartButtonState();
         });
