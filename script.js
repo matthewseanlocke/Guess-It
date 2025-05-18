@@ -316,6 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             heightInputContainer.classList.remove('hidden');
             feetInput.value = '';
             inchesInput.value = '';
+            feetInput.max = 9; // Set max attribute for feet input
             
             // Update unit display for threshold
             if (thresholdUnitElement) {
@@ -1207,4 +1208,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, 500); // 500ms delay for visual effect
     }
+
+    // Prevent feet input from exceeding 9
+    feetInput.addEventListener('input', function() {
+        if (parseInt(this.value) > 9) {
+            this.value = 9;
+        }
+    });
 }); 

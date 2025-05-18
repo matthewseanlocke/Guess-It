@@ -738,10 +738,12 @@ input:disabled {
 
 /* Highlight active player in scoreboard */
 .player-score.active-player {
-  animation: pulse-player 2s infinite;
+  animation: pulse-player-strong 1.2s infinite;
   border-width: 3px;
   position: relative;
   z-index: 5;
+  transform: scale(1.12);
+  box-shadow: 0 0 24px 6px rgba(59, 130, 246, 0.25);
 }
 
 /* Current player text animation - same as active player card */
@@ -777,6 +779,17 @@ input:disabled {
   50% {
     transform: scale(1.03);
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes pulse-player-strong {
+  0%, 100% {
+    transform: scale(1.12);
+    box-shadow: 0 0 24px 6px rgba(59, 130, 246, 0.25);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 40px 12px rgba(59, 130, 246, 0.45);
   }
 }
 
