@@ -905,4 +905,93 @@ input:disabled {
   background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ffe140, #ff6ec4);
   background-size: 1000% 1000%;
   animation: rainbow-bg 8s linear infinite;
+}
+
+body.dark {
+  background: #18181b;
+  color: #f3f4f6;
+}
+
+body.dark #setup-screen {
+  background: #23232b;
+  color: #f3f4f6;
+}
+
+body.dark h2, body.dark label, body.dark .font-semibold, body.dark .text-gray-700 {
+  color: #f3f4f6 !important;
+}
+
+body.dark .player-btn,
+body.dark .stat-btn,
+body.dark .threshold-btn {
+  background: #27272a;
+  color: #f3f4f6;
+  border-color: #52525b;
+}
+
+body.dark .player-btn.active, body.dark .stat-btn.bg-blue-600, body.dark .threshold-btn.bg-purple-700 {
+  background: #3b82f6 !important;
+  color: #fff !important;
+  border-color: #2563eb !important;
+}
+
+body.dark input, body.dark select {
+  background: #18181b;
+  color: #f3f4f6;
+  border-color: #52525b;
+}
+
+body.dark #start-game {
+  background: #3b82f6;
+  color: #fff;
+}
+
+body.dark #start-game:disabled {
+  background: #27272a;
+  color: #a1a1aa;
+}
+
+body.dark #game-screen,
+body.dark #game-over-screen {
+  background: #23232b !important;
+  color: #f3f4f6 !important;
+}
+
+body.dark .scoreboard {
+  background: #18181b !important;
+  border-top: 2px solid #27272a !important;
+}
+
+body.dark .player-score {
+  background: #23232b !important;
+  color: #f3f4f6 !important;
+  border-color: #52525b !important;
+}
+
+body.dark .player-color-0,
+body.dark .player-color-1,
+body.dark .player-color-2,
+body.dark .player-color-3 {
+  background: #23232b !important;
+  color: #f3f4f6 !important;
+  border-color: #52525b !important;
+}
+
+body.dark .text-center.mb-2.sticky.top-0.z-20.bg-white.pb-2 {
+  background: transparent !important;
+}
+body.dark .text-center.mb-2.sticky.top-0.z-20.bg-white.pb-2 h2,
+body.dark .text-center.mb-2.sticky.top-0.z-20.bg-white.pb-2 span {
+  color: #fff !important;
+  text-shadow: 0 2px 8px #0008;
+}
+
+body.dark #result-container {
+  background: #23232b !important;
+  border: 2px solid #52525b !important;
+  color: #f3f4f6 !important;
+}
+body.dark #result-container p,
+body.dark #result-container span {
+  color: #f3f4f6 !important;
 } 

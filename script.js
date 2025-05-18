@@ -1304,9 +1304,6 @@ document.addEventListener('DOMContentLoaded', () => {
             msg.remove();
         });
         
-        // Hide the result container
-        resultContainer.classList.add('hidden');
-        
         // Add a small delay for visual effect
         setTimeout(() => {
             // If game is already over, show the game over screen and exit
@@ -1458,4 +1455,30 @@ document.addEventListener('DOMContentLoaded', () => {
     feetInput.addEventListener('input', validateGuessInputs);
     inchesInput.addEventListener('input', validateGuessInputs);
     weightInput.addEventListener('input', validateGuessInputs);
+
+    // Dark mode logic
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    function setDarkMode(enabled) {
+        if (enabled) {
+            document.body.classList.add('dark');
+            localStorage.setItem('darkMode', 'true');
+            if (darkModeToggle) darkModeToggle.checked = true;
+        } else {
+            document.body.classList.remove('dark');
+            localStorage.setItem('darkMode', 'false');
+            if (darkModeToggle) darkModeToggle.checked = false;
+        }
+    }
+    // On page load, default to light mode (or use saved preference)
+    const darkPref = localStorage.getItem('darkMode');
+    if (darkPref === 'true') {
+        setDarkMode(true);
+    } else {
+        setDarkMode(false);
+    }
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', (e) => {
+            setDarkMode(e.target.checked);
+        });
+    }
 }); 
