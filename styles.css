@@ -1085,29 +1085,30 @@ body.dark #start-game-container {
 }
 
 /* Card flip styles for result reveal */
-#result-container {
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .flip-card {
-  background: transparent;
-  width: 100%;
-  max-width: 400px;
-  min-height: 160px;
-  perspective: 1000px;
+  width: 400px;
+  height: 260px;
+  max-width: 95vw;
+  max-height: 80vw;
+  min-width: 320px;
+  min-height: 220px;
+  background: #f0f9ff;
+  border: 3px solid #bfdbfe;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(59,130,246,0.08);
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .flip-card-inner {
   position: relative;
   width: 100%;
   min-height: 160px;
+  height: 100%;
   transition: transform 0.7s cubic-bezier(.4,2,.6,1);
   transform-style: preserve-3d;
 }
@@ -1119,17 +1120,19 @@ body.dark #start-game-container {
 .flip-card-front, .flip-card-back {
   position: absolute;
   width: 100%;
-  min-height: 160px;
+  height: 100%;
+  min-height: unset;
   backface-visibility: hidden;
   border-radius: 1rem;
-  box-shadow: 0 4px 24px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(59,130,246,0.08);
-  border: 3px solid #bfdbfe;
-  background: #f0f9ff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem 1rem 1.5rem 1rem;
+  background: #f0f9ff;
+  color: #222;
+  border: none;
+  box-shadow: none;
 }
 
 .flip-card-front {
@@ -1151,7 +1154,37 @@ body.dark #start-game-container {
 }
 
 @media (max-width: 500px) {
+  .flip-card {
+    width: 98vw;
+    min-width: 0;
+    height: 220px;
+    min-height: 160px;
+  }
   .flip-card-front .question-mark {
     font-size: 3.2rem;
   }
+}
+
+body.dark .flip-card {
+  background: #23232b !important;
+  border-color: #3b82f6 !important;
+}
+body.dark .flip-card-front .question-mark {
+  color: #fff !important;
+  text-shadow: 0 0 12px #60a5fa, 0 0 32px #2563eb, 2px 2px 8px #000;
+}
+body.dark .flip-card-back {
+  background: none !important;
+  border: none !important;
+}
+
+body.dark h2.text-blue-600 {
+  color: #93c5fd !important; /* Tailwind blue-300 */
+  text-shadow: 0 2px 8px #1e293b, 0 0 12px #2563eb;
+}
+
+body.dark .flip-card-front, body.dark .flip-card-back {
+  background: rgba(36,40,54,0.96) !important;
+  color: #fff !important;
+  padding: 2rem 1rem 1.5rem 1rem;
 } 
