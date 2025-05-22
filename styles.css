@@ -1025,4 +1025,9 @@ body.dark #result-container span {
 @keyframes player-btn-glow {
   0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.3); }
   100% { box-shadow: 0 0 16px 4px rgba(59,130,246,0.25); }
+}
+
+body.dark #start-game-container {
+  background: #23232b !important;
+  border-top: 1px solid #27272a !important;
 } 
