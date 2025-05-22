@@ -1297,7 +1297,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Reset the start-here highlight
-        document.querySelector('.start-here-section').classList.remove('selection-made');
+        const startHereSection = document.querySelector('.start-here-section');
+        startHereSection.classList.remove('selection-made');
+        startHereSection.classList.add('rainbow-attract');
         
         startGameButton.disabled = true;
         playerNamesContainer.classList.add('hidden');
