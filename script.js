@@ -967,40 +967,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const confetti = [];
         const colors = ['#ff6ec4', '#7873f5', '#42e695', '#ffe140', '#ff6ec4', '#f87171', '#34d399', '#fbbf24', '#f472b6', '#60a5fa', '#facc15'];
         for (let i = 0; i < confettiCount; i++) {
+            // About 1 in 8 stars will be large
+            const isLarge = Math.random() < 0.125;
+            const baseR = Math.random() * 10 + 6;
+            const r = isLarge ? baseR * 2.5 : baseR;
             confetti.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * -canvas.height,
-                r: Math.random() * 10 + 6,
+                r: r,
                 d: Math.random() * confettiCount,
                 color: colors[Math.floor(Math.random() * colors.length)],
                 tilt: Math.random() * 20 - 10,
                 tiltAngleIncremental: Math.random() * 0.09 + 0.05,
-                tiltAngle: 0
+                tiltAngle: 0,
+                dx: (Math.random() - 0.5) * 1.2, // random horizontal drift
+                dy: Math.random() * 1.5 + 4.5    // random downward speed
             });
         }
         let angle = 0;
         let tiltAngle = 0;
         confettiActive = true;
+        function drawStar(ctx, x, y, r, color) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(x, y);
+            ctx.moveTo(0, 0 - r);
+            for (let i = 0; i < 5; i++) {
+                ctx.rotate(Math.PI / 5);
+                ctx.lineTo(0, 0 - (r * 0.5));
+                ctx.rotate(Math.PI / 5);
+                ctx.lineTo(0, 0 - r);
+            }
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.globalAlpha = 0.85;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.restore();
+        }
         function drawConfetti() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < confettiCount; i++) {
                 let c = confetti[i];
-                ctx.beginPath();
-                ctx.lineWidth = c.r;
-                ctx.strokeStyle = c.color;
-                ctx.moveTo(c.x + c.tilt + c.r / 3, c.y);
-                ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
-                ctx.stroke();
+                drawStar(ctx, c.x + c.tilt, c.y, c.r / 2, c.color);
             }
             updateConfetti();
         }
         function updateConfetti() {
-            angle += 0.01;
-            tiltAngle += 0.1;
+            //angle += 0.01;
+            //tiltAngle += 0.1;
             for (let i = 0; i < confettiCount; i++) {
                 let c = confetti[i];
-                c.y += (Math.cos(angle + c.d) + 3 + c.r / 2) / 1.2;
-                c.x += Math.sin(angle) * 1.5;
+                c.y += c.dy;
+                c.x += c.dx;
                 c.tiltAngle += c.tiltAngleIncremental;
                 c.tilt = Math.sin(c.tiltAngle - i) * 18;
                 if (c.y > canvas.height) {
