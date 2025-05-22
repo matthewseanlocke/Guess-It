@@ -856,19 +856,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.statToGuess === 'height') {
             const { feet, inches } = cmToFeetInches(currentAthlete[gameState.statToGuess]);
             actualValueElement.textContent = `${feet}'${inches}"`;
-            guessValueElement.textContent = `${feetInput.value}'${inchesInput.value}"`;
-            
-            // Disable height inputs
+            // Remove updating guessValueElement since the line is removed from HTML
+            // feetInput.disabled = true;
+            // inchesInput.disabled = true;
             feetInput.disabled = true;
             inchesInput.disabled = true;
         } else {
             const actualPounds = kgToPounds(currentAthlete[gameState.statToGuess]);
             actualValueElement.textContent = actualPounds;
-            guessValueElement.textContent = guess;
+            // Remove updating guessValueElement since the line is removed from HTML
             unitDisplayElement.textContent = 'lbs';
             unitDisplay2Element.textContent = 'lbs';
-            
-            // Disable weight input
             weightInput.disabled = true;
         }
         
@@ -1049,29 +1047,48 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Display final results
         finalScoreboard.innerHTML = '';
-        
+        const placeEmojis = [
+            { emoji: '🏆', size: '2.5rem' }, // 1st: Gold Trophy
+            { emoji: '💩', size: '1.2rem' }, // 2nd: Small Poop
+            { emoji: '💩', size: '1.7rem' }, // 3rd: Medium Poop
+            { emoji: '💩', size: '2.2rem' }  // 4th: Large Poop
+        ];
+        const playerColors = [
+            '#2563eb', // Blue (Player 1)
+            '#dc2626', // Red (Player 2)
+            '#059669', // Green (Player 3)
+            '#d97706'  // Orange (Player 4)
+        ];
         sortedPlayers.forEach((player, index) => {
             const playerIndex = gameState.players.indexOf(player);
             const playerResult = document.createElement('div');
-            playerResult.className = 'mb-2 p-2 rounded player-color-' + (playerIndex % 4);
-            
-            // Winner is the only non-eliminated player, or always in 1-player mode
-            if (gameState.numberOfPlayers === 1 || playerIndex === winnerIndex) {
-                playerResult.classList.add('winner');
-                playerResult.innerHTML = `
-                    <p class="font-semibold">${index + 1}. ${player.name} - WINNER!</p>
-                    <p class="text-xl">${player.score} points</p>
-                `;
-                console.log(`DEBUG: Adding ${player.name} as winner to final scoreboard`);
+            playerResult.style.marginBottom = '1rem';
+            playerResult.style.padding = '1rem';
+            playerResult.style.borderRadius = '0.75rem';
+            playerResult.style.border = '2px solid #e5e7eb';
+            playerResult.style.background = '#fff';
+            playerResult.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
+            playerResult.style.display = 'flex';
+            playerResult.style.flexDirection = 'column';
+            playerResult.style.alignItems = 'center';
+            playerResult.style.boxShadow = 'none';
+
+            let emoji = '';
+            let emojiSize = '1.5rem';
+            let nameColor = playerColors[playerIndex % playerColors.length] || '#222';
+            if (index < 4) {
+                emoji = placeEmojis[index].emoji;
+                emojiSize = placeEmojis[index].size;
             } else {
-                playerResult.classList.add('loser');
-                playerResult.innerHTML = `
-                    <p class="font-semibold">${index + 1}. ${player.name} - BUST</p>
-                    <p class="text-xl">${player.score} points</p>
-                `;
-                console.log(`DEBUG: Adding ${player.name} as loser to final scoreboard`);
+                nameColor = '#6b7280'; // Muted gray
             }
-            
+
+            playerResult.innerHTML = `
+                <div style=\"display:flex;flex-direction:column;align-items:center;justify-content:center;\">
+                  <span style=\"font-size:${emojiSize};line-height:1;\">${emoji}</span>
+                  <span style=\"font-weight:bold;font-size:1.3rem;color:${nameColor};\">${player.name}</span>
+                </div>
+            `;
             finalScoreboard.appendChild(playerResult);
         });
         

@@ -84,22 +84,22 @@
                         <input type="checkbox" id="soccer" class="sport-checkbox" value="Soccer">
                         <label for="soccer" class="ml-1 whitespace-nowrap">Soccer</label>
                     </div>
-                    <div class="sport-option">
+                    <!--<div class="sport-option">
                         <input type="checkbox" id="tennis" class="sport-checkbox" value="Tennis">
                         <label for="tennis" class="ml-1 whitespace-nowrap">Tennis</label>
-                    </div>
-                    <div class="sport-option">
+                    </div>-->
+                    <!--<div class="sport-option">
                         <input type="checkbox" id="track" class="sport-checkbox" value="Track & Field">
                         <label for="track" class="ml-1 whitespace-nowrap">Track & Field</label>
-                    </div>
-                    <div class="sport-option">
+                    </div>-->
+                    <!--<div class="sport-option">
                         <input type="checkbox" id="swimming" class="sport-checkbox" value="Swimming">
                         <label for="swimming" class="ml-1 whitespace-nowrap">Swimming</label>
-                    </div>
-                    <div class="sport-option">
+                    </div>-->
+                    <!--<div class="sport-option">
                         <input type="checkbox" id="gymnastics" class="sport-checkbox" value="Gymnastics">
                         <label for="gymnastics" class="ml-1 whitespace-nowrap">Gymnastics</label>
-                    </div>
+                    </div>-->
                     <div class="sport-option">
                         <input type="checkbox" id="boxing" class="sport-checkbox" value="Boxing">
                         <label for="boxing" class="ml-1 whitespace-nowrap">Boxing</label>
@@ -168,7 +168,6 @@
 
             <div id="result-container" class="hidden mb-6 p-4 rounded-lg text-center">
                 <p class="text-xl">Actual <span id="stat-type">height</span>: <span id="actual-value">0</span> <span id="unit-display"></span></p>
-                <p class="text-xl">Your guess: <span id="guess-value">0</span> <span id="unit-display2"></span></p>
                 <p class="text-xl font-bold">Difference: <span id="difference-value">0</span> points</p>
                 <button id="next-turn" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -192,7 +191,7 @@
             <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:none;"></canvas>
             <div id="final-results" class="mb-6">
                 <p class="text-2xl font-semibold mb-2">Results:</p>
-                <div id="final-scoreboard" class="text-left p-4 bg-gray-100 rounded-lg"></div>
+                <div id="final-scoreboard" class="text-left p-4"></div>
             </div>
             <button id="play-again" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Play Again</button>
         </div>
