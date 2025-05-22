@@ -1141,20 +1141,16 @@ body.dark #start-game-container {
   z-index: 3;
 }
 
-/* Question mark style for card front */
+/* Card front question mark: match splash screen */
 .flip-card-front .question-mark {
   color: #38bdf8;
-  text-shadow: 2px 2px 12px #bae6fd, 0 0 0 #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2), 0 0 0 #fff;
   font-size: 5rem;
-  animation: titlePulse 2.5s infinite;
+  display: inline-block;
+  animation: bounce 1.5s infinite;
 }
 
-/* Responsive for mobile */
 @media (max-width: 500px) {
-  .flip-card, .flip-card-inner, .flip-card-front, .flip-card-back {
-    min-height: 120px;
-    padding: 1.2rem 0.5rem 1rem 0.5rem;
-  }
   .flip-card-front .question-mark {
     font-size: 3.2rem;
   }

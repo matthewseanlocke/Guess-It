@@ -848,6 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show result
         resultContainer.classList.remove('hidden');
+        // Clear bust message before showing
+        const bustMessageDiv = document.getElementById('bust-message');
+        if (bustMessageDiv) bustMessageDiv.innerHTML = '';
         // Trigger card flip
         setTimeout(() => {
             resultContainer.classList.add('flipped');
@@ -885,13 +888,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // If player is eliminated, update the result message
         if (isPlayerEliminated) {
             console.log(`DEBUG: Player ${gameState.players[gameState.currentPlayerIndex].name} eliminated during turn`);
-            
-            // Add eliminated message to the result container
-            const eliminatedMessage = document.createElement('p');
-            eliminatedMessage.className = 'mt-3 text-red-600 font-bold text-xl elimination-message';
-            eliminatedMessage.textContent = `${gameState.players[gameState.currentPlayerIndex].name} has BUST!`;
-            resultContainer.appendChild(eliminatedMessage);
-            
+            // Set bust message inside the card
+            if (bustMessageDiv) {
+                bustMessageDiv.innerHTML = `<span class='text-red-600 font-bold text-lg elimination-message'>${gameState.players[gameState.currentPlayerIndex].name} has BUST!</span>`;
+            }
             // Highlight the next turn button more prominently
             nextTurnButton.classList.add('eliminated-player-next');
         }
@@ -1325,6 +1325,8 @@ document.addEventListener('DOMContentLoaded', () => {
         usedAthletesIndices = [];
         
         logGameState("After reset game");
+        // Clear bust message on reset
+        if (bustMessageDiv) bustMessageDiv.innerHTML = '';
     }
 
     // Next player's turn
