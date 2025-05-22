@@ -1193,4 +1193,44 @@ body.dark .flip-card-front, body.dark .flip-card-back {
 
 body.dark .text-center.mb-2.bg-white.pb-2 {
   background: #23232b !important;
+}
+
+/* Number of Players label */
+.start-here-section label {
+  color: #1e293b !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  opacity: 1 !important;
+}
+body.dark .start-here-section label {
+  color: #fff !important;
+}
+
+/* Player buttons */
+.player-btn {
+  background: #23232b;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+.player-btn.active {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+body.dark .start-here-section {
+  background: #23232b !important;
+  border: 2px solid #3b82f6 !important;
+  box-shadow: 0 2px 12px 0 rgba(59,130,246,0.10);
+}
+body.dark .player-btn {
+  background: #18181b !important;
+  color: #fff !important;
+  border: 2px solid #3b82f6 !important;
+}
+body.dark .player-btn.active {
+  background: #3b82f6 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
 } 
