@@ -785,8 +785,18 @@ document.addEventListener('DOMContentLoaded', () => {
         currentAthlete = filteredAthletes[randomIndex];
         
         // Update display
-        athleteNameElement.textContent = currentAthlete.name;
-        athleteInfoElement.textContent = currentAthlete.sport;
+        // athleteNameElement.textContent = currentAthlete.name;
+        // athleteInfoElement.textContent = currentAthlete.sport;
+        // Update front of flip card
+        const frontAthleteName = document.getElementById('front-athlete-name');
+        const frontAthleteInfo = document.getElementById('front-athlete-info');
+        if (frontAthleteName) frontAthleteName.textContent = currentAthlete.name;
+        if (frontAthleteInfo) frontAthleteInfo.textContent = currentAthlete.sport;
+        // Update back of flip card
+        const backAthleteName = document.getElementById('back-athlete-name');
+        const backAthleteInfo = document.getElementById('back-athlete-info');
+        if (backAthleteName) backAthleteName.textContent = currentAthlete.name;
+        if (backAthleteInfo) backAthleteInfo.textContent = currentAthlete.sport;
         
         // Reset form and validate inputs
         updateInputFields();
@@ -853,6 +863,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show result
         resultContainer.classList.remove('hidden');
+        // Set athlete name and info in result card (back)
+        const backAthleteName2 = document.getElementById('back-athlete-name');
+        const backAthleteInfo2 = document.getElementById('back-athlete-info');
+        if (backAthleteName2) backAthleteName2.textContent = currentAthlete.name;
+        if (backAthleteInfo2) backAthleteInfo2.textContent = currentAthlete.sport;
+        // Set athlete name and info in result card (front)
+        const frontAthleteName2 = document.getElementById('front-athlete-name');
+        const frontAthleteInfo2 = document.getElementById('front-athlete-info');
+        if (frontAthleteName2) frontAthleteName2.textContent = currentAthlete.name;
+        if (frontAthleteInfo2) frontAthleteInfo2.textContent = currentAthlete.sport;
         // Clear bust message before showing
         const bustMessageDiv = document.getElementById('bust-message');
         if (bustMessageDiv) bustMessageDiv.innerHTML = '';
