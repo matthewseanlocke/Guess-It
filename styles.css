@@ -1030,4 +1030,9 @@ body.dark #result-container span {
 body.dark #start-game-container {
   background: #23232b !important;
   border-top: 1px solid #27272a !important;
+}
+
+#transition-player-name {
+  -webkit-text-stroke: 1px #fff;
+  text-stroke: 1px #fff;
 } 
