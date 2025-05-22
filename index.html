@@ -166,15 +166,22 @@
                 <button id="submit-guess" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Submit Guess</button>
             </div>
 
-            <div id="result-container" class="hidden mb-6 p-4 rounded-lg text-center">
-                <p class="text-xl">Actual <span id="stat-type">height</span>: <span id="actual-value">0</span> <span id="unit-display"></span></p>
-                <p class="text-xl font-bold">Difference: <span id="difference-value">0</span> points</p>
-                <button id="next-turn" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    NEXT TURN
-                </button>
+            <div class="result-flip-wrapper" style="margin-bottom: 1.5rem;">
+              <div class="result-flip-card">
+                <div class="result-flip-front flex items-center justify-center h-full w-full text-5xl text-blue-600 font-bold" style="min-height:120px;">?</div>
+                <div class="result-flip-back">
+                  <div id="result-container" class="hidden mb-6 p-4 rounded-lg text-center">
+                    <p class="text-xl">Actual <span id="stat-type">height</span>: <span id="actual-value">0</span> <span id="unit-display"></span></p>
+                    <p class="text-xl font-bold">Difference: <span id="difference-value">0</span> points</p>
+                    <button id="next-turn" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        NEXT TURN
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
         
