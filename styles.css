@@ -292,6 +292,8 @@ button:active:not(:disabled) {
 /* Adjust game screen to make room for fixed scoreboard */
 #game-screen {
   padding-bottom: 120px;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 /* Disabled input styling */
@@ -906,6 +908,9 @@ input:disabled {
   background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ffe140, #ff6ec4);
   background-size: 1000% 1000%;
   animation: rainbow-bg 8s linear infinite;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding-bottom: 120px;
 }
 
 body.dark {
