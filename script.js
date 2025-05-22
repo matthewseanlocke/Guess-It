@@ -960,8 +960,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('confetti-canvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resizeCanvasAndConfetti() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvasAndConfetti();
         canvas.style.display = 'block';
         const confettiCount = 300;
         const confetti = [];
@@ -987,6 +995,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let angle = 0;
         let tiltAngle = 0;
         confettiActive = true;
+        // Add resize handler
+        window.addEventListener('resize', resizeCanvasAndConfetti);
         function drawStar(ctx, x, y, r, color) {
             ctx.save();
             ctx.beginPath();
@@ -1014,8 +1024,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateConfetti();
         }
         function updateConfetti() {
-            //angle += 0.01;
-            //tiltAngle += 0.1;
             for (let i = 0; i < confettiCount; i++) {
                 let c = confetti[i];
                 c.y += c.dy;
@@ -1034,6 +1042,8 @@ document.addEventListener('DOMContentLoaded', () => {
             confettiAnimationId = requestAnimationFrame(animate);
         }
         animate();
+        // Store the resize handler for cleanup
+        canvas._resizeHandler = resizeCanvasAndConfetti;
     }
     function stopConfetti() {
         confettiActive = false;
@@ -1043,6 +1053,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             canvas.style.display = 'none';
+            // Remove resize handler
+            if (canvas._resizeHandler) {
+                window.removeEventListener('resize', canvas._resizeHandler);
+                delete canvas._resizeHandler;
+            }
         }
     }
 
