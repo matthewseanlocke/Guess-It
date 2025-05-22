@@ -793,6 +793,7 @@ document.addEventListener('DOMContentLoaded', () => {
         validateGuessInputs();
         resultContainer.classList.add('hidden');
         resultContainer.classList.remove('flipped');
+        setGuessPulse(true);
     }
 
     // Submit a guess
@@ -1347,134 +1348,147 @@ document.addEventListener('DOMContentLoaded', () => {
     // Next player's turn
     function nextTurn() {
         console.log("DEBUG: nextTurn called");
-        // Add visual feedback for button click
-        nextTurnButton.classList.add('clicked');
-        nextTurnButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-spin inline-block mr-2" viewBox="0 0 24 24" fill="none">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Loading...
-        `;
-        
-        // Clean up any existing elimination messages
-        const eliminationMessages = document.querySelectorAll('.elimination-message');
-        eliminationMessages.forEach(msg => {
-            msg.remove();
-        });
-        
-        // Add a small delay for visual effect
-        setTimeout(() => {
-            // If game is already over, show the game over screen and exit
-            if (gameState.gameOver) {
-                console.log("DEBUG: Game over detected in nextTurn");
-                showGameOverScreen();
-                return;
-            }
+        try {
+            // Add visual feedback for button click
+            nextTurnButton.classList.add('clicked');
+            nextTurnButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-spin inline-block mr-2" viewBox="0 0 24 24" fill="none">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Loading...
+            `;
             
-            // 1-player mode: just keep going until eliminated
-            if (gameState.numberOfPlayers === 1) {
-                // If the player is eliminated, end the game
-                if (gameState.eliminatedPlayers.includes(0)) {
-                    gameState.gameOver = true;
-                    showGameOverScreen();
-                    return;
-                }
-                // Otherwise, just select a new athlete and continue
-                gameState.currentRound++;
-                currentRoundElement.textContent = gameState.currentRound;
-                updateCurrentPlayerDisplay();
-                updateScoreboard();
-                selectNewAthlete();
-                submitGuessButton.disabled = false;
-                submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                feetInput.disabled = false;
-                inchesInput.disabled = false;
-                weightInput.disabled = false;
-                nextTurnButton.classList.remove('clicked');
-                nextTurnButton.classList.remove('eliminated-player-next');
-                nextTurnButton.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    NEXT TURN
-                `;
-                logGameState("After nextTurn processing (1-player mode)");
-                return;
-            }
-            
-            // Move to the next player
-            gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
-            console.log(`DEBUG: Advanced to next player index: ${gameState.currentPlayerIndex}`);
-            
-            // Track if we've completed a round (everyone had a turn)
-            const roundComplete = gameState.currentPlayerIndex === 0;
-            
-            // If we've reached the start of a new round, process eliminations and increment round
-            if (roundComplete) {
-                console.log("DEBUG: Round complete, processing eliminations");
-                // Process any players marked for elimination
-                processEliminationsAtRoundEnd();
-                
-                // If game became over after processing eliminations, exit the function
-                if (gameState.gameOver) {
-                    console.log("DEBUG: Game over after processing eliminations");
-                    return;
-                }
-                
-                // Increment round number
-                gameState.currentRound++;
-                console.log(`DEBUG: New round: ${gameState.currentRound}`);
-                currentRoundElement.textContent = gameState.currentRound;
-            }
-            
-            // Skip any already eliminated players
-            let attemptCount = 0;
-            const maxAttempts = gameState.numberOfPlayers; // Prevent infinite loop
-            
-            console.log(`DEBUG: Checking if current player ${gameState.currentPlayerIndex} is eliminated`);
-            console.log(`DEBUG: Eliminated players: ${JSON.stringify(gameState.eliminatedPlayers)}`);
-            
-            while (gameState.eliminatedPlayers.includes(gameState.currentPlayerIndex) && 
-                    attemptCount < maxAttempts) {
-                console.log(`DEBUG: Player ${gameState.currentPlayerIndex} is eliminated, moving to next`);
-                gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
-                attemptCount++;
-                
-                // If we've checked all players and they're all eliminated except one,
-                // the game should end
-                if (attemptCount >= maxAttempts - 1 && 
-                    gameState.eliminatedPlayers.length >= gameState.numberOfPlayers - 1) {
-                    console.log(`DEBUG: All but one player eliminated - game over`);
-                    gameState.gameOver = true;
-                    showGameOverScreen();
-                    return;
-                }
-            }
-            
-            // Update current player display with correct color
-            // Instead of immediately updating, show transition overlay
-            const nextPlayerName = gameState.players[gameState.currentPlayerIndex].name;
-            showTurnTransition(nextPlayerName, () => {
-                updateCurrentPlayerDisplay();
-                updateScoreboard();
-                selectNewAthlete();
-                submitGuessButton.disabled = false;
-                submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                feetInput.disabled = false;
-                inchesInput.disabled = false;
-                weightInput.disabled = false;
-                nextTurnButton.classList.remove('clicked');
-                nextTurnButton.classList.remove('eliminated-player-next');
-                nextTurnButton.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                    NEXT TURN
-                `;
-                logGameState("After nextTurn processing");
+            // Clean up any existing elimination messages
+            const eliminationMessages = document.querySelectorAll('.elimination-message');
+            eliminationMessages.forEach(msg => {
+                msg.remove();
             });
-        }, 500); // 500ms delay for visual effect
+            
+            // Add a small delay for visual effect
+            setTimeout(() => {
+                // If game is already over, show the game over screen and exit
+                if (gameState.gameOver) {
+                    console.log("DEBUG: Game over detected in nextTurn");
+                    showGameOverScreen();
+                    return;
+                }
+                
+                // 1-player mode: just keep going until eliminated
+                if (gameState.numberOfPlayers === 1) {
+                    // If the player is eliminated, end the game
+                    if (gameState.eliminatedPlayers.includes(0)) {
+                        gameState.gameOver = true;
+                        showGameOverScreen();
+                        return;
+                    }
+                    // Otherwise, just select a new athlete and continue
+                    gameState.currentRound++;
+                    currentRoundElement.textContent = gameState.currentRound;
+                    updateCurrentPlayerDisplay();
+                    updateScoreboard();
+                    selectNewAthlete();
+                    submitGuessButton.disabled = false;
+                    submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    feetInput.disabled = false;
+                    inchesInput.disabled = false;
+                    weightInput.disabled = false;
+                    nextTurnButton.classList.remove('clicked');
+                    nextTurnButton.classList.remove('eliminated-player-next');
+                    nextTurnButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        NEXT TURN
+                    `;
+                    logGameState("After nextTurn processing (1-player mode)");
+                    return;
+                }
+                
+                // Move to the next player
+                gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
+                console.log(`DEBUG: Advanced to next player index: ${gameState.currentPlayerIndex}`);
+                
+                // Track if we've completed a round (everyone had a turn)
+                const roundComplete = gameState.currentPlayerIndex === 0;
+                
+                // If we've reached the start of a new round, process eliminations and increment round
+                if (roundComplete) {
+                    console.log("DEBUG: Round complete, processing eliminations");
+                    // Process any players marked for elimination
+                    processEliminationsAtRoundEnd();
+                    
+                    // If game became over after processing eliminations, exit the function
+                    if (gameState.gameOver) {
+                        console.log("DEBUG: Game over after processing eliminations");
+                        return;
+                    }
+                    
+                    // Increment round number
+                    gameState.currentRound++;
+                    console.log(`DEBUG: New round: ${gameState.currentRound}`);
+                    currentRoundElement.textContent = gameState.currentRound;
+                }
+                
+                // Skip any already eliminated players
+                let attemptCount = 0;
+                const maxAttempts = gameState.numberOfPlayers; // Prevent infinite loop
+                
+                console.log(`DEBUG: Checking if current player ${gameState.currentPlayerIndex} is eliminated`);
+                console.log(`DEBUG: Eliminated players: ${JSON.stringify(gameState.eliminatedPlayers)}`);
+                
+                while (gameState.eliminatedPlayers.includes(gameState.currentPlayerIndex) && 
+                        attemptCount < maxAttempts) {
+                    console.log(`DEBUG: Player ${gameState.currentPlayerIndex} is eliminated, moving to next`);
+                    gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % gameState.numberOfPlayers;
+                    attemptCount++;
+                    
+                    // If we've checked all players and they're all eliminated except one,
+                    // the game should end
+                    if (attemptCount >= maxAttempts - 1 && 
+                        gameState.eliminatedPlayers.length >= gameState.numberOfPlayers - 1) {
+                        console.log(`DEBUG: All but one player eliminated - game over`);
+                        gameState.gameOver = true;
+                        showGameOverScreen();
+                        return;
+                    }
+                }
+                
+                // Update current player display with correct color
+                // Instead of immediately updating, show transition overlay
+                const nextPlayerName = gameState.players[gameState.currentPlayerIndex].name;
+                showTurnTransition(nextPlayerName, () => {
+                    updateCurrentPlayerDisplay();
+                    updateScoreboard();
+                    selectNewAthlete();
+                    submitGuessButton.disabled = false;
+                    submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    feetInput.disabled = false;
+                    inchesInput.disabled = false;
+                    weightInput.disabled = false;
+                    nextTurnButton.classList.remove('clicked');
+                    nextTurnButton.classList.remove('eliminated-player-next');
+                    nextTurnButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        NEXT TURN
+                    `;
+                    logGameState("After nextTurn processing");
+                });
+            }, 500); // 500ms delay for visual effect
+            setGuessPulse(true);
+        } catch (error) {
+            console.error("Error in nextTurn:", error);
+            // Reset button state in case of error
+            nextTurnButton.classList.remove('clicked');
+            nextTurnButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                NEXT TURN
+            `;
+        }
     }
 
     // Prevent feet input from exceeding 9
@@ -1540,4 +1554,28 @@ document.addEventListener('DOMContentLoaded', () => {
             setDarkMode(e.target.checked);
         });
     }
-}); 
+
+    // Utility to add animated highlight to guess input fields
+    function setGuessPulse(active) {
+        [feetInput, inchesInput, weightInput].forEach(input => {
+            if (input) {
+                if (active) input.classList.add('guess-pulse');
+                else input.classList.remove('guess-pulse');
+            }
+        });
+    }
+
+    // Remove pulse on input focus
+    [feetInput, inchesInput, weightInput].forEach(input => {
+        if (input) {
+            input.addEventListener('focus', () => setGuessPulse(false));
+        }
+    });
+
+    // Add pulse again after next turn
+    function addPulseAfterNextTurn() {
+        setTimeout(() => {
+            setGuessPulse(true);
+        }, 500);
+    }
+}); // End of DOMContentLoaded event listener 
