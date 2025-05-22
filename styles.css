@@ -95,9 +95,13 @@ button:disabled {
 
 /* Result container styling */
 #result-container {
-  background-color: #f0f9ff;
-  border: 2px solid #bfdbfe;
-  border-radius: 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Correct/Wrong guess styling */
@@ -1078,4 +1082,80 @@ body.dark #start-game-container {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Card flip styles for result reveal */
+#result-container {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flip-card {
+  background: transparent;
+  width: 100%;
+  max-width: 400px;
+  min-height: 160px;
+  perspective: 1000px;
+  margin: 0 auto;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  min-height: 160px;
+  transition: transform 0.7s cubic-bezier(.4,2,.6,1);
+  transform-style: preserve-3d;
+}
+
+#result-container.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  min-height: 160px;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(59,130,246,0.10), 0 1.5px 8px 0 rgba(59,130,246,0.08);
+  border: 3px solid #bfdbfe;
+  background: #f0f9ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem 1.5rem 1rem;
+}
+
+.flip-card-front {
+  z-index: 2;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  z-index: 3;
+}
+
+/* Question mark style for card front */
+.flip-card-front .question-mark {
+  color: #38bdf8;
+  text-shadow: 2px 2px 12px #bae6fd, 0 0 0 #fff;
+  font-size: 5rem;
+  animation: titlePulse 2.5s infinite;
+}
+
+/* Responsive for mobile */
+@media (max-width: 500px) {
+  .flip-card, .flip-card-inner, .flip-card-front, .flip-card-back {
+    min-height: 120px;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
+  .flip-card-front .question-mark {
+    font-size: 3.2rem;
+  }
 } 

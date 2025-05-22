@@ -792,6 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateInputFields();
         validateGuessInputs();
         resultContainer.classList.add('hidden');
+        resultContainer.classList.remove('flipped');
     }
 
     // Submit a guess
@@ -847,10 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show result
         resultContainer.classList.remove('hidden');
-
-        // Scroll the result and Next Turn button into view on mobile
+        // Trigger card flip
         setTimeout(() => {
-            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            resultContainer.classList.add('flipped');
         }, 100);
         
         if (gameState.statToGuess === 'height') {
@@ -1272,6 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Clear result container
         resultContainer.classList.add('hidden');
+        resultContainer.classList.remove('flipped');
         
         // Reset next turn button appearance
         nextTurnButton.classList.remove('clicked');
