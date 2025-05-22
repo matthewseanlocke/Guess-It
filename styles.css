@@ -685,6 +685,9 @@ input:disabled {
   z-index: 50;
   max-width: 100%;
   box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #start-game {
@@ -693,6 +696,7 @@ input:disabled {
   letter-spacing: 0.05em;
   font-size: 1.1rem;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 #start-game:not(:disabled):hover {
