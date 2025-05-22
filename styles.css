@@ -1179,12 +1179,18 @@ body.dark .flip-card-back {
 }
 
 body.dark h2.text-blue-600 {
-  color: #93c5fd !important; /* Tailwind blue-300 */
+  color: #93c5fd !important;
   text-shadow: 0 2px 8px #1e293b, 0 0 12px #2563eb;
+  -webkit-text-stroke: 1px #fff;
+  text-stroke: 1px #fff;
 }
 
 body.dark .flip-card-front, body.dark .flip-card-back {
   background: rgba(36,40,54,0.96) !important;
   color: #fff !important;
   padding: 2rem 1rem 1.5rem 1rem;
+}
+
+body.dark .text-center.mb-2.bg-white.pb-2 {
+  background: #23232b !important;
 } 
