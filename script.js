@@ -794,6 +794,10 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.classList.add('hidden');
         resultContainer.classList.remove('flipped');
         setGuessPulse(true);
+
+        // In selectNewAthlete, after setGuessPulse(true):
+        nextTurnButton.disabled = true;
+        nextTurnButton.classList.add('opacity-50', 'cursor-not-allowed');
     }
 
     // Submit a guess
@@ -898,6 +902,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         logGameState("After submitting guess");
+
+        // In submitGuess, after resultContainer.classList.remove('hidden') and before logGameState:
+        nextTurnButton.disabled = false;
+        nextTurnButton.classList.remove('opacity-50', 'cursor-not-allowed');
     }
 
     // Check if the current player is eliminated
