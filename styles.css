@@ -1035,4 +1035,37 @@ body.dark #start-game-container {
 #transition-player-name {
   -webkit-text-stroke: 1px #fff;
   text-stroke: 1px #fff;
+}
+
+#play-again {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  background: #fff !important;
+  color: #2563eb !important;
+  font-weight: bold;
+  transition: color 0.2s, background 0.2s;
+}
+#play-again:hover {
+  background: #2563eb !important;
+  color: #fff !important;
+}
+#play-again::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: 0.5rem;
+  padding: 0;
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ffe140, #ff6ec4);
+  background-size: 800% 800%;
+  animation: rainbow-play-again 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes rainbow-play-again {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 } 
