@@ -894,7 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
             actualValueElement.textContent = actualPounds;
             // Remove updating guessValueElement since the line is removed from HTML
             unitDisplayElement.textContent = 'lbs';
-            unitDisplay2Element.textContent = 'lbs';
+            // unitDisplay2Element.textContent = 'lbs'; // Removed because this element does not exist
             weightInput.disabled = true;
         }
         
@@ -1303,7 +1303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.players = [];
         gameState.currentPlayerIndex = 0;
         gameState.numberOfPlayers = 0;
-        gameState.statToGuess = 'height'; // Reset to default
+        // gameState.statToGuess = 'height'; // Do not reset statToGuess so user selection persists
         gameState.currentRound = 1;
         gameState.gameOver = false;
         gameState.eliminatedPlayers = []; // Reset eliminated players array
