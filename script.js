@@ -1418,6 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectNewAthlete();
                     submitGuessButton.disabled = false;
                     submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    validateGuessInputs();
                     feetInput.disabled = false;
                     inchesInput.disabled = false;
                     weightInput.disabled = false;
@@ -1491,6 +1492,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectNewAthlete();
                     submitGuessButton.disabled = false;
                     submitGuessButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    validateGuessInputs();
                     feetInput.disabled = false;
                     inchesInput.disabled = false;
                     weightInput.disabled = false;

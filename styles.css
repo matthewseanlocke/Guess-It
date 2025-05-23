@@ -1283,4 +1283,13 @@ body.dark #front-athlete-name {
 body.dark #front-athlete-info {
   color: #b3b3b3 !important;
   opacity: 1 !important;
+}
+
+#submit-guess {
+  font-size: 1.35rem;
+  padding: 1rem 2.5rem;
+  min-width: 220px;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px 0 #2563eb33;
 } 
