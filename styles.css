@@ -927,12 +927,46 @@ body.dark .guess-pulse {
 }
 
 #game-over-screen {
-  background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ffe140, #ff6ec4);
-  background-size: 1000% 1000%;
-  animation: rainbow-bg 8s linear infinite;
-  height: calc(100vh - 120px);
-  overflow-y: auto;
-  padding-bottom: 120px;
+  background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 60%, #42e695 100%);
+  border-radius: 1.5rem 1.5rem 2.5rem 2.5rem;
+  box-shadow: 0 8px 32px 0 rgba(120, 115, 245, 0.15), 0 2px 8px 0 #ff6ec455;
+  padding: 2.2rem 1.5rem 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 320px;
+  position: relative;
+  overflow-y: visible;
+  z-index: 1;
+}
+
+#game-over-screen::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 70px;
+  background: linear-gradient(0deg, #fff 0%, rgba(255,255,255,0) 100%);
+  border-radius: 0 0 2.5rem 2.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#game-over-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg"><g opacity="0.18"><circle cx="30" cy="30" r="4" fill="%23fff"/><circle cx="120" cy="50" r="2.5" fill="%23ffe140"/><polygon points="180,20 183,28 191,28 185,33 187,41 180,36 173,41 175,33 169,28 177,28" fill="%23fbbf24"/><circle cx="60" cy="90" r="3" fill="%237873f5"/><polygon points="100,100 102,105 108,105 104,109 106,115 100,111 94,115 96,109 92,105 98,105" fill="%2342e695"/></g></svg>');
+  background-repeat: repeat;
+  background-size: 200px 120px;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  #game-over-screen {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+    min-height: 220px;
+  }
 }
 
 body.dark {
@@ -1381,4 +1415,51 @@ body.dark .player-color-3 {
   flex-direction: column;
   align-items: center;
   box-shadow: none;
+}
+
+/* Results background for game over screen */
+.results-bg {
+  background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 60%, #42e695 100%);
+  border-radius: 1.5rem 1.5rem 2.5rem 2.5rem;
+  box-shadow: 0 8px 32px 0 rgba(120, 115, 245, 0.15), 0 2px 8px 0 #ff6ec455;
+  padding: 2.2rem 1.5rem 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 320px;
+  max-height: 480px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.results-bg::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 70px;
+  background: linear-gradient(0deg, #fff 0%, rgba(255,255,255,0) 100%);
+  border-radius: 0 0 2.5rem 2.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Subtle confetti/star overlay */
+.results-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg"><g opacity="0.18"><circle cx="30" cy="30" r="4" fill="%23fff"/><circle cx="120" cy="50" r="2.5" fill="%23ffe140"/><polygon points="180,20 183,28 191,28 185,33 187,41 180,36 173,41 175,33 169,28 177,28" fill="%23fbbf24"/><circle cx="60" cy="90" r="3" fill="%237873f5"/><polygon points="100,100 102,105 108,105 104,109 106,115 100,111 94,115 96,109 92,105 98,105" fill="%2342e695"/></g></svg>');
+  background-repeat: repeat;
+  background-size: 200px 120px;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .results-bg {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+    min-height: 220px;
+    max-height: 340px;
+  }
 } 
