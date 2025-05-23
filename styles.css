@@ -1061,8 +1061,46 @@ body.dark #start-game-container {
 }
 
 #transition-player-name {
-  -webkit-text-stroke: 1px #fff;
-  text-stroke: 1px #fff;
+  -webkit-text-stroke: 2px #fff;
+  text-stroke: 2px #fff;
+  font-weight: 900;
+}
+
+#transition-player-name.player-color-0 {
+  color: #60a5fa;
+}
+
+#transition-player-name.player-color-1 {
+  color: #f87171;
+}
+
+#transition-player-name.player-color-2 {
+  color: #34d399;
+}
+
+#transition-player-name.player-color-3 {
+  color: #fbbf24;
+}
+
+body.dark #transition-player-name {
+  -webkit-text-stroke: 2px #fff;
+  text-stroke: 2px #fff;
+}
+
+body.dark #transition-player-name.player-color-0 {
+  color: #60a5fa;
+}
+
+body.dark #transition-player-name.player-color-1 {
+  color: #f87171;
+}
+
+body.dark #transition-player-name.player-color-2 {
+  color: #34d399;
+}
+
+body.dark #transition-player-name.player-color-3 {
+  color: #fbbf24;
 }
 
 #play-again {
@@ -1292,4 +1330,32 @@ body.dark #front-athlete-info {
   font-weight: bold;
   letter-spacing: 0.03em;
   box-shadow: 0 2px 8px 0 #2563eb33;
+}
+
+body.dark .player-color-0 {
+  color: #60a5fa !important; /* Brighter blue */
+  border-color: #3b82f6 !important;
+  background: #1e3a8a !important; /* Darker blue background */
+  font-weight: bold;
+}
+
+body.dark .player-color-1 {
+  color: #f87171 !important; /* Brighter red */
+  border-color: #ef4444 !important;
+  background: #7f1d1d !important; /* Darker red background */
+  font-weight: bold;
+}
+
+body.dark .player-color-2 {
+  color: #34d399 !important; /* Brighter green */
+  border-color: #10b981 !important;
+  background: #064e3b !important; /* Darker green background */
+  font-weight: bold;
+}
+
+body.dark .player-color-3 {
+  color: #fbbf24 !important; /* Brighter orange/yellow */
+  border-color: #f59e0b !important;
+  background: #78350f !important; /* Darker orange background */
+  font-weight: bold;
 } 

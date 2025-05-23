@@ -683,28 +683,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show transition overlay for the next player
     function showTurnTransition(playerName, callback) {
         if (turnTransitionOverlay && transitionPlayerName) {
-            // Remove any previous color classes from text
-            transitionPlayerName.classList.remove('text-blue-600', 'text-red-600', 'text-green-600', 'text-yellow-600');
+            // Remove any previous color classes
+            transitionPlayerName.classList.remove('player-color-0', 'player-color-1', 'player-color-2', 'player-color-3');
             // Always use semi-transparent black for scrim
             turnTransitionOverlay.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            // Determine color class for player name
+            // Add the appropriate player color class
             const colorIndex = gameState.currentPlayerIndex % 4;
-            let colorClass = '';
-            switch (colorIndex) {
-                case 0:
-                    colorClass = 'text-blue-600';
-                    break;
-                case 1:
-                    colorClass = 'text-red-600';
-                    break;
-                case 2:
-                    colorClass = 'text-green-600';
-                    break;
-                case 3:
-                    colorClass = 'text-yellow-600';
-                    break;
-            }
-            if (colorClass) transitionPlayerName.classList.add(colorClass);
+            transitionPlayerName.classList.add(`player-color-${colorIndex}`);
             transitionPlayerName.textContent = playerName;
             turnTransitionOverlay.style.display = 'flex';
             setTimeout(() => {
