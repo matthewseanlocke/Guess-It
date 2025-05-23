@@ -1111,39 +1111,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const playerIndex = gameState.players.indexOf(player);
             const playerResult = document.createElement('div');
             playerResult.className = 'final-result-card';
-            playerResult.style.marginBottom = '1rem';
-            playerResult.style.padding = '1rem';
-            playerResult.style.borderRadius = '0.75rem';
-            playerResult.style.border = '2px solid #e5e7eb';
-            playerResult.style.background = '#fff';
-            playerResult.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
-            playerResult.style.display = 'flex';
-            playerResult.style.flexDirection = 'column';
-            playerResult.style.alignItems = 'center';
-            playerResult.style.boxShadow = 'none';
-
             let emoji = '';
             let emojiSize = '1.5rem';
             let nameColor = playerColors[playerIndex % playerColors.length] || '#222';
             let nameSize = '1.3rem'; // Default size
-
             if (index < 4) {
                 emoji = placeEmojis[index].emoji;
                 emojiSize = placeEmojis[index].size;
-                // Decrease text size for each subsequent place
                 nameSize = `${2.5 - (index * 0.4)}rem`;
             } else {
                 nameColor = '#6b7280'; // Muted gray
             }
-
             playerResult.innerHTML = `
                 <div style=\"display:flex;flex-direction:column;align-items:center;justify-content:center;\">
                   <span style=\"font-size:${emojiSize};line-height:1;\">${emoji}</span>
                   <span style=\"font-weight:bold;font-size:${nameSize};color:${nameColor};\">${player.name}</span>
+                  <span style=\"font-size:1.1rem;color:#444;margin-top:0.2rem;\">Score: <b>${player.score}</b></span>
                 </div>
             `;
             finalScoreboard.appendChild(playerResult);
         });
+        // Hide the fixed scoreboard
+        gameScoreboardElement.classList.add('hidden');
+        // Hide the start game button container
+        const startGameContainer = document.getElementById('start-game-container');
+        if (startGameContainer) startGameContainer.style.display = 'none';
         
         // Clear any elimination messages
         const eliminationMessages = document.querySelectorAll('.elimination-message');
@@ -1354,6 +1346,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show setup screen
         gameOverScreen.classList.add('hidden');
         setupScreen.classList.remove('hidden');
+        // Show the start game button container again
+        const startGameContainer = document.getElementById('start-game-container');
+        if (startGameContainer) startGameContainer.style.display = '';
         
         // Reset used athletes
         usedAthletesIndices = [];
