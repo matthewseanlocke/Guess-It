@@ -452,17 +452,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Guess (stat) button logic: swap classes for selected/unselected
     function updateStatButtonStyles() {
         statButtons.forEach(btn => {
-            btn.classList.remove('bg-blue-600', 'bg-white', 'text-white', 'text-blue-700', 'font-bold', 'border-blue-800', 'border-blue-300');
+            // Remove all possible classes
+            btn.classList.remove(
+                'bg-blue-600', 'bg-white', 'text-white', 'text-blue-700', 'font-bold',
+                'border-blue-800', 'border-blue-300', 'active'
+            );
             // Remove any forced inline styles
             btn.style.backgroundColor = '';
             btn.style.color = '';
             if (btn.getAttribute('data-stat') === gameState.statToGuess) {
-                btn.classList.add('bg-blue-600', 'text-white', 'font-bold', 'border-blue-800');
-                // Force correct color with inline style
-                btn.style.backgroundColor = '#2563eb'; // Tailwind blue-600
-                btn.style.color = '#fff';
+                btn.classList.add('bg-blue-600', 'text-white', 'font-bold', 'border-blue-800', 'active');
             } else {
                 btn.classList.add('bg-white', 'text-blue-700', 'border-blue-300');
+                btn.classList.remove('active');
             }
         });
     }
