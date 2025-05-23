@@ -1110,6 +1110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sortedPlayers.forEach((player, index) => {
             const playerIndex = gameState.players.indexOf(player);
             const playerResult = document.createElement('div');
+            playerResult.className = 'final-result-card';
             playerResult.style.marginBottom = '1rem';
             playerResult.style.padding = '1rem';
             playerResult.style.borderRadius = '0.75rem';
@@ -1124,9 +1125,13 @@ document.addEventListener('DOMContentLoaded', () => {
             let emoji = '';
             let emojiSize = '1.5rem';
             let nameColor = playerColors[playerIndex % playerColors.length] || '#222';
+            let nameSize = '1.3rem'; // Default size
+
             if (index < 4) {
                 emoji = placeEmojis[index].emoji;
                 emojiSize = placeEmojis[index].size;
+                // Decrease text size for each subsequent place
+                nameSize = `${2.5 - (index * 0.4)}rem`;
             } else {
                 nameColor = '#6b7280'; // Muted gray
             }
@@ -1134,7 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playerResult.innerHTML = `
                 <div style=\"display:flex;flex-direction:column;align-items:center;justify-content:center;\">
                   <span style=\"font-size:${emojiSize};line-height:1;\">${emoji}</span>
-                  <span style=\"font-weight:bold;font-size:1.3rem;color:${nameColor};\">${player.name}</span>
+                  <span style=\"font-weight:bold;font-size:${nameSize};color:${nameColor};\">${player.name}</span>
                 </div>
             `;
             finalScoreboard.appendChild(playerResult);
