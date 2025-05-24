@@ -312,6 +312,8 @@ body.dark .round-display h2 {
 
 /* Adjust game screen to make room for fixed scoreboard */
 #game-screen {
+  padding-top: 64px !important;
+  margin-top: 20px !important;
   padding-bottom: 120px;
   height: calc(100vh - 120px);
   overflow-y: auto;
@@ -1540,5 +1542,19 @@ body.dark .player-color-3 {
   }
   100% {
     transform: scale(1) rotate(0);
+  }
+}
+
+.container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #game-screen {
+    padding-top: 2px !important;
+  }
+  .container {
+    padding-top: 0 !important;
   }
 } 
