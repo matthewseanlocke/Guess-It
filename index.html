@@ -135,10 +135,6 @@
         
         <!-- Game Screen -->
         <div id="game-screen" class="hidden bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto transition-colors duration-300 ease-in-out">
-            <div class="text-center mb-2 bg-white pb-2">
-                <h2 class="text-4xl font-bold text-blue-600">Round <span id="current-round">1</span></h2>
-            </div>
-            
             <div class="guess-input-container mb-6 text-center">
                 <label for="guess-input" class="block text-xl mb-2">Your Guess:</label>
                 
@@ -191,10 +187,10 @@
         
         <!-- Fixed Scoreboard -->
         <div id="game-scoreboard" class="scoreboard hidden">
-            <div id="player-scores" class="grid grid-cols-4 gap-4 mt-2"></div>
-            <div class="game-threshold-display mt-2 text-center">
-                <p class="text-sm text-gray-600">Game to <span id="threshold-display">50</span> <span id="threshold-unit">inches</span></p>
+            <div class="round-display text-center mb-2">
+                <h2 class="text-2xl font-bold text-blue-600">Round <span id="current-round">1</span></h2>
             </div>
+            <div id="player-scores" class="grid grid-cols-4 gap-4 mt-2"></div>
         </div>
         
         <!-- Game Over Screen -->
