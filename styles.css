@@ -1586,4 +1586,10 @@ body.dark .player-color-3 {
 .guess-input-container label[for="guess-input"] {
   font-size: 2rem !important;
   font-weight: bold;
+}
+
+#weight-input-container input#weight-input {
+  width: 10rem !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
 } 

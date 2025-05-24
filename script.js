@@ -375,13 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show appropriate input fields based on what we're guessing
     function updateInputFields() {
+        const guessLabel = document.getElementById('guess-label');
         if (gameState.statToGuess === 'height') {
             weightInputContainer.classList.add('hidden');
             heightInputContainer.classList.remove('hidden');
             feetInput.value = '';
             inchesInput.value = '';
             feetInput.max = 9; // Set max attribute for feet input
-            
+            if (guessLabel) guessLabel.textContent = 'Height?';
             // Update unit display for threshold
             if (thresholdUnitElement) {
                 thresholdUnitElement.textContent = 'inches';
@@ -390,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
             heightInputContainer.classList.add('hidden');
             weightInputContainer.classList.remove('hidden');
             weightInput.value = '';
-            
+            if (guessLabel) guessLabel.textContent = 'Weight?';
             // Update unit display for threshold
             if (thresholdUnitElement) {
                 thresholdUnitElement.textContent = 'pounds';
