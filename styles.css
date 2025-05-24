@@ -1557,4 +1557,30 @@ body.dark .player-color-3 {
   .container {
     padding-top: 0 !important;
   }
+}
+
+/* Make guess input boxes and text bigger */
+#height-input-container input,
+#weight-input-container input {
+  font-size: 2.2rem !important;
+  padding: 0.75rem 1.5rem !important;
+  width: 4.5rem !important;
+  height: 3.5rem !important;
+  border-width: 3px !important;
+}
+
+#height-input-container span,
+#weight-input-container span {
+  font-size: 2rem !important;
+  font-weight: bold;
+}
+
+#height-input-container,
+#weight-input-container {
+  gap: 1.5rem !important;
+}
+
+.guess-input-container label[for="guess-input"] {
+  font-size: 2rem !important;
+  font-weight: bold;
 } 
