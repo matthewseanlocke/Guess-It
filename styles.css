@@ -1592,4 +1592,9 @@ body.dark .player-color-3 {
   width: 10rem !important;
   padding-left: 0.5rem !important;
   padding-right: 0.5rem !important;
+}
+
+#guess-label {
+  margin-bottom: 1.2rem !important;
+  display: block;
 } 
