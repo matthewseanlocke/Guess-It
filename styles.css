@@ -1388,12 +1388,12 @@ body.dark #front-athlete-info {
 }
 
 #submit-guess {
-  font-size: 1.35rem;
-  padding: 1rem 2.5rem;
-  min-width: 220px;
-  font-weight: bold;
-  letter-spacing: 0.03em;
-  box-shadow: 0 2px 8px 0 #2563eb33;
+  font-size: 2.2rem !important;
+  padding: 1.2rem 0 !important;
+  min-width: 260px !important;
+  font-weight: 800 !important;
+  border-radius: 1rem !important;
+  letter-spacing: 0.04em;
 }
 
 body.dark .player-color-0 {
