@@ -1357,6 +1357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         logGameState("After reset game");
         // Clear bust message on reset
+        const bustMessageDiv = document.getElementById('bust-message');
         if (bustMessageDiv) bustMessageDiv.innerHTML = '';
     }
 
