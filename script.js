@@ -1519,6 +1519,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (this.value.length >= 1) {
             inchesInput.focus();
         }
+        // Restrict to single digit
+        if (this.value.length > 1) {
+            this.value = this.value.slice(0, 1);
+        }
+    });
+
+    // Add validation for inches input (0-11)
+    inchesInput.addEventListener('input', function() {
+        let value = parseInt(this.value);
+        // Ensure value is between 0 and 11
+        if (value > 11) {
+            this.value = 11;
+        }
+        // Limit to 2 digits max
+        if (this.value.length > 2) {
+            this.value = this.value.slice(0, 2);
+        }
+    });
+
+    // Add validation for weight input (3 digits max: 0-999)
+    weightInput.addEventListener('input', function() {
+        // Limit to 3 digits max
+        if (this.value.length > 3) {
+            this.value = this.value.slice(0, 3);
+        }
+        // Optional: Ensure value is reasonable (e.g., not zero)
+        if (parseInt(this.value) === 0) {
+            this.value = '';
+        }
     });
 
     // Stop confetti when Play Again is pressed
