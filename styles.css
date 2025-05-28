@@ -1569,6 +1569,11 @@ body.dark .player-color-3 {
   vertical-align: middle;
 }
 
+/* Make inches input wider to fit 2 digits */
+#height-input-container input#inches-input {
+  width: 6rem !important; 
+}
+
 #height-input-container span,
 #weight-input-container span {
   font-size: 2rem !important;
